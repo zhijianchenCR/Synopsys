@@ -278,3 +278,64 @@ export const geographicData = [
     { country: 'South Korea', traffic: 15680, percentage: 7 },
     { country: 'Others', traffic: 17920, percentage: 8 },
 ];
+
+export const aiInsights = [
+    {
+        type: 'positive' as const,
+        title: 'Exceptional Growth in Organic Traffic',
+        description: 'Your organic traffic has grown by 92% over the past 12 months, significantly outpacing industry averages. The AI-driven EDA content is driving unprecedented engagement from technical decision-makers.'
+    },
+    {
+        type: 'neutral' as const,
+        title: 'Keyword Portfolio Diversification Opportunity',
+        description: 'Analysis shows 68% of traffic comes from your top 50 keywords. Consider expanding into emerging semiconductor topics like chiplet architecture and advanced packaging to capture growing market segments.'
+    },
+    {
+        type: 'warning' as const,
+        title: 'Competitive Pressure in Core Markets',
+        description: 'Cadence Design Systems has increased keyword overlap by 23% in the past quarter, particularly in verification and AI-chip design categories. Strategic content reinforcement is recommended.'
+    },
+    {
+        type: 'positive' as const,
+        title: 'Strong Performance in APAC Markets',
+        description: 'Taiwan and South Korea markets show 45% higher engagement rates than global average, indicating strong product-market fit. Consider localized content strategies for these regions.'
+    }
+];
+
+export const actionableInsights = [
+    {
+        priority: 'high' as const,
+        action: 'Create targeted content for "AI chip design" and "machine learning accelerators" - high volume keywords with low competition',
+        impact: 'High',
+        effort: 'Medium',
+        category: 'Content Strategy'
+    },
+    {
+        priority: 'high' as const,
+        action: 'Optimize top 10 underperforming pages (positions 11-20) with improved meta descriptions and internal linking',
+        impact: 'High',
+        effort: 'Low',
+        category: 'SEO Optimization'
+    },
+    {
+        priority: 'medium' as const,
+        action: 'Develop comprehensive comparison guides for Synopsys vs Cadence products to capture competitive search traffic',
+        impact: 'Medium',
+        effort: 'High',
+        category: 'Competitive Analysis'
+    },
+    {
+        priority: 'medium' as const,
+        action: 'Build backlink partnerships with semiconductor industry publications and technical blogs to improve domain authority',
+        impact: 'High',
+        effort: 'High',
+        category: 'Link Building'
+    },
+    {
+        priority: 'low' as const,
+        action: 'Refresh older verification and simulation content (2+ years old) with updated case studies and product capabilities',
+        impact: 'Medium',
+        effort: 'Medium',
+        category: 'Content Refresh'
+    }
+];

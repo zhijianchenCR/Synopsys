@@ -5,6 +5,8 @@ import TrafficChart from './components/TrafficChart';
 import CompetitorAnalysis from './components/CompetitorAnalysis';
 import TopPages from './components/TopPages';
 import GeographicDistribution from './components/GeographicDistribution';
+import AIInsightsSummary from './components/AIInsightsSummary';
+import ActionableInsights from './components/ActionableInsights';
 import {
     synopsysKeywords,
     trafficHistory,
@@ -12,6 +14,8 @@ import {
     metricsSummary,
     topPages,
     geographicData,
+    aiInsights,
+    actionableInsights,
 } from './data/synopsysData';
 
 function App() {
@@ -108,6 +112,11 @@ function App() {
                         </div>
                     </div>
 
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                        <AIInsightsSummary insights={aiInsights} />
+                        <ActionableInsights actions={actionableInsights} />
+                    </div>
+
                     <div className="mb-8">
                         <div className="glass-card rounded-2xl shadow-2xl p-6 mb-4 border-2 border-white/20">
                             <h2 className="text-2xl font-bold text-gray-900 mb-2">Keyword Performance</h2>
@@ -121,13 +130,6 @@ function App() {
                         <CompetitorAnalysis competitors={competitors} />
                     </div>
 
-                    <div className="glass-card rounded-2xl shadow-2xl p-10 text-center border-2 border-white/20">
-                        <h3 className="text-3xl font-bold text-gray-900 mb-3">Powering Innovation in EDA</h3>
-                        <p className="text-gray-800 text-base max-w-2xl mx-auto leading-relaxed font-medium">
-                            Synopsys continues to lead the electronic design automation industry with cutting-edge solutions
-                            for AI-powered chip design, verification, and silicon IP.
-                        </p>
-                    </div>
                 </div>
 
             </div>
