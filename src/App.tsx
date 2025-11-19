@@ -1,4 +1,4 @@
-import { TrendingUp, Search, Target, Link2, DollarSign, Award } from 'lucide-react';
+import { TrendingUp, Search, Target, Link2, DollarSign, Award, CreditCard } from 'lucide-react';
 import MetricsCard from './components/MetricsCard';
 import KeywordTable from './components/KeywordTable';
 import TrafficChart from './components/TrafficChart';
@@ -7,6 +7,8 @@ import TopPages from './components/TopPages';
 import GeographicDistribution from './components/GeographicDistribution';
 import AIInsightsSummary from './components/AIInsightsSummary';
 import ActionableInsights from './components/ActionableInsights';
+import PaidVsOrganic from './components/PaidVsOrganic';
+import ROIAnalysis from './components/ROIAnalysis';
 import {
     synopsysKeywords,
     trafficHistory,
@@ -16,6 +18,7 @@ import {
     geographicData,
     aiInsights,
     actionableInsights,
+    adPerformanceData,
 } from './data/synopsysData';
 
 function App() {
@@ -95,12 +98,20 @@ function App() {
                             iconBg="bg-teal-50"
                         />
                         <MetricsCard
-                            title="Competitors Tracked"
-                            value={competitors.length}
-                            icon={Target}
-                            iconColor="text-red-600"
-                            iconBg="bg-red-50"
+                            title="Monthly Ad Spend"
+                            value={`$${(metricsSummary.adSpend / 1000).toFixed(0)}K`}
+                            change={5.4}
+                            icon={CreditCard}
+                            iconColor="text-purple-600"
+                            iconBg="bg-purple-50"
                         />
+                    </div>
+
+                    <div className="mb-6">
+                        <div className="glass-card rounded-2xl shadow-2xl p-4 mb-4 border-2 border-white/20">
+                            <h2 className="text-lg font-bold text-gray-900 mb-1">Traffic & Geographic Insights</h2>
+                            <p className="text-xs text-gray-700">Monitor traffic trends across channels and geographic distribution</p>
+                        </div>
                     </div>
 
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
@@ -112,17 +123,46 @@ function App() {
                         </div>
                     </div>
 
+                    <div className="mb-6">
+                        <div className="glass-card rounded-2xl shadow-2xl p-4 mb-4 border-2 border-white/20">
+                            <h2 className="text-lg font-bold text-gray-900 mb-1">Ad Performance & ROI</h2>
+                            <p className="text-xs text-gray-700">Analyze advertising efficiency and return on investment metrics</p>
+                        </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                        <PaidVsOrganic data={adPerformanceData} />
+                        <ROIAnalysis data={adPerformanceData} />
+                    </div>
+
+                    <div className="mb-6">
+                        <div className="glass-card rounded-2xl shadow-2xl p-4 mb-4 border-2 border-white/20">
+                            <h2 className="text-lg font-bold text-gray-900 mb-1">AI-Powered Intelligence</h2>
+                            <p className="text-xs text-gray-700">Smart insights and recommended actions to optimize your marketing strategy</p>
+                        </div>
+                    </div>
+
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
                         <AIInsightsSummary insights={aiInsights} />
                         <ActionableInsights actions={actionableInsights} />
                     </div>
 
-                    <div className="mb-8">
-                        <div className="glass-card rounded-2xl shadow-2xl p-6 mb-4 border-2 border-white/20">
-                            <h2 className="text-2xl font-bold text-gray-900 mb-2">Keyword Performance</h2>
-                            <p className="text-sm text-gray-700 font-medium">Top ranking keywords driving traffic to Synopsys</p>
+                    <div className="mb-6">
+                        <div className="glass-card rounded-2xl shadow-2xl p-4 mb-4 border-2 border-white/20">
+                            <h2 className="text-lg font-bold text-gray-900 mb-1">Keyword Performance</h2>
+                            <p className="text-xs text-gray-700">Track ranking positions, search volume, and traffic value for top keywords</p>
                         </div>
+                    </div>
+
+                    <div className="mb-8">
                         <KeywordTable keywords={synopsysKeywords} maxRows={20} />
+                    </div>
+
+                    <div className="mb-6">
+                        <div className="glass-card rounded-2xl shadow-2xl p-4 mb-4 border-2 border-white/20">
+                            <h2 className="text-lg font-bold text-gray-900 mb-1">Pages & Competitive Landscape</h2>
+                            <p className="text-xs text-gray-700">Analyze top-performing pages and benchmark against key competitors</p>
+                        </div>
                     </div>
 
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">

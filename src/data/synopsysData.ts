@@ -31,6 +31,15 @@ export interface MetricSummary {
     domainAuthority: number;
     backlinks: number;
     trafficValue: number;
+    adSpend: number;
+}
+
+export interface AdPerformanceData {
+    month: string;
+    adSpend: number;
+    organicValue: number;
+    paidTraffic: number;
+    organicTraffic: number;
 }
 
 export const synopsysKeywords: KeywordData[] = [
@@ -260,7 +269,17 @@ export const metricsSummary: MetricSummary = {
     domainAuthority: 84,
     backlinks: 127500,
     trafficValue: 892000,
+    adSpend: 165000,
 };
+
+export const adPerformanceData: AdPerformanceData[] = [
+    { month: 'May 2025', adSpend: 125000, organicValue: 678000, paidTraffic: 23000, organicTraffic: 145000 },
+    { month: 'Jun 2025', adSpend: 132000, organicValue: 712000, paidTraffic: 25000, organicTraffic: 158000 },
+    { month: 'Jul 2025', adSpend: 142000, organicValue: 761000, paidTraffic: 27000, organicTraffic: 172000 },
+    { month: 'Aug 2025', adSpend: 148000, organicValue: 823000, paidTraffic: 29000, organicTraffic: 189000 },
+    { month: 'Sep 2025', adSpend: 157000, organicValue: 856000, paidTraffic: 31000, organicTraffic: 206000 },
+    { month: 'Oct 2025', adSpend: 165000, organicValue: 892000, paidTraffic: 33000, organicTraffic: 224000 },
+];
 
 export const topPages = [
     { url: '/solutions/silicon-design.html', traffic: 28400, keywords: 342, value: 89200 },
