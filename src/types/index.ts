@@ -31,19 +31,13 @@ export interface GeographicData {
 }
 
 export interface CompetitorData {
-    domain: string;  
-    name: string; // for display (UI uses competitor.name)
-    
+    domain: string;
+    competitorRelevance: number;
     commonKeywords: number;
     organicKeywords: number;
+    organicTraffic: number;
     organicCost: number;
     adwordsKeywords: number;
-    traffic: number;
-    
-    competitionLevel: number; // YOUR UI uses this for progress bar
-    
-    competitorRelevance?: number; // optional because UI doesn’t use it
-    organicTraffic?: number; // optional because UI doesn’t use it
 }
 
 export interface TopPageData {
@@ -60,13 +54,13 @@ export interface TopPageData {
 
 export interface KeywordOpportunity {
     keyword: string;
-    keywordType: "Gap" | "Predictive" | "Defensive" | string;
+    currentPosition: number;
+    searchVolume: number;
+    traffic: number;
+    potentialTraffic: number;
+    difficulty: number;
+    url: string;
     intent: string;
-    relevance: number;
-    competition: "High" | "Medium" | "Low";
-    suggestedBid: string;
-    rationale: string;
-    searchVolume?: number;
 }
 
 export interface AIInsight {

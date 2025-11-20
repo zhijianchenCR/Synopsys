@@ -152,42 +152,29 @@ export function transformTopPages(data: SEMrushData | null) {
 export function calculateKeywordOpportunities(data: SEMrushData | null) {
     if (!data) return [];
 
+    const positionRange = { min: 11, max: 20 };
+
     return data.organicKeywords
-        .filter(kw => kw.position >= 11 && kw.position <= 30)
+        .filter(kw => kw.position >= positionRange.min && kw.position <= positionRange.max)
+        .filter(kw => kw.searchVolume >= 100)
+        .sort((a, b) => (b.searchVolume * (21 - b.position)) - (a.searchVolume * (21 - a.position)))
         .slice(0, 50)
         .map(kw => {
             const potentialTraffic = Math.round(kw.searchVolume * 0.15);
-            const currentTraffic = kw.traffic || 0;
+            const currentTraffic = kw.traffic;
             const trafficGain = potentialTraffic - currentTraffic;
 
             return {
                 keyword: kw.keyword,
-
-                // 🟩 matches your UI logic
-                keywordType:
-                    kw.position > 20 ? "Gap"
-                        : kw.keywordDifficulty > 60 ? "Defensive"
-                            : "Predictive",
-
-                intent: kw.keywordIntents || "Informational",
-
-                relevance: Math.min(
-                    100,
-                    Math.max(60, 100 - kw.position * 2)
-                ),
-
-                competition:
-                    kw.keywordDifficulty >= 70
-                        ? "High"
-                        : kw.keywordDifficulty >= 50
-                            ? "Medium"
-                            : "Low",
-
+                intent: kw.keywordIntents || 'Informational',
+                relevance: Math.min(95, Math.round((kw.searchVolume / 1000) * (21 - kw.position))),
+                competition: kw.keywordDifficulty >= 70 ? 'High' : kw.keywordDifficulty >= 50 ? 'Medium' : 'Low',
+                ctrImpact: trafficGain > 500 ? 'High' : trafficGain > 100 ? 'Medium' : 'Low',
                 suggestedBid: `$${(kw.cpc || 2.5).toFixed(2)}`,
-
-                rationale: `Ranking at position ${kw.position}. Improving to top 10 could gain approx ${trafficGain.toLocaleString()} visits/month.`,
-
-                searchVolume: kw.searchVolume
+                keywordType: kw.position > 15 ? 'Gap' : 'Shared',
+                rationale: `Currently ranking at position ${kw.position}. Moving to top 10 could increase traffic by ${trafficGain.toLocaleString()} visits/month`,
+                searchVolume: kw.searchVolume,
+                cpc: kw.cpc
             };
         });
 }

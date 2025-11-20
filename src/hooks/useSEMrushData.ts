@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { loadAllSEMrushData } from './../utils/semrushParser';
-import type { OrganicKeyword, PaidKeyword, Competitor, TrafficTrend, GeoDistribution, TopPage } from './../utils/semrushParser';
+import { loadAllSEMrushData } from '../utils/semrushParser';
+import type { OrganicKeyword, PaidKeyword, Competitor, TrafficTrend, GeoDistribution, TopPage } from '../utils/semrushParser';
 
 export interface SEMrushData {
     organicKeywords: OrganicKeyword[];
