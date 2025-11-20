@@ -1,7 +1,7 @@
 import { TrendingUp, Search, Target, Link2, DollarSign, Award, CreditCard } from 'lucide-react';
 import MetricsCard from './components/MetricsCard';
 import KeywordTable from './components/KeywordTable';
-import TrafficChart from './components/TrafficChart';
+import TrafficTrendChart from './components/TrafficTrendChart';
 import CompetitorAnalysis from './components/CompetitorAnalysis';
 import TopPages from './components/TopPages';
 import GeographicDistribution from './components/GeographicDistribution';
@@ -10,16 +10,17 @@ import ActionableInsights from './components/ActionableInsights';
 import PaidVsOrganic from './components/PaidVsOrganic';
 import ROIAnalysis from './components/ROIAnalysis';
 import {
-    synopsysKeywords,
-    trafficHistory,
+    organicKeywords,
     competitors,
     metricsSummary,
     topPages,
-    geographicData,
+    geographicVisitsData,
+    geographicUniqueVisitorsData,
     aiInsights,
     actionableInsights,
     adPerformanceData,
-} from './data/synopsysData';
+    trafficMetrics,
+} from './data/realData';
 
 function App() {
     return (
@@ -41,14 +42,8 @@ function App() {
                                     </div>
                                 </div>
                                 <div>
-                                    <h1 className="text-4xl font-bold text-white tracking-tight mb-1">Synopsys Analytics</h1>
-                                    <p className="text-base text-blue-100 font-medium">Marketing Intelligence Dashboard</p>
-                                </div>
-                            </div>
-                            <div className="flex items-center space-x-3">
-                                <div className="glass-card px-6 py-3 rounded-xl shadow-xl border-2 border-white/20">
-                                    <p className="text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">Domain Authority</p>
-                                    <p className="text-3xl font-bold text-gray-900">{metricsSummary.domainAuthority}</p>
+                                    <h1 className="text-4xl font-bold bg-gradient-to-r from-white via-blue-100 to-cyan-100 bg-clip-text text-transparent tracking-tight mb-1">Synopsys</h1>
+                                    <p className="text-base text-blue-200/90 font-medium tracking-wide">Digital Marketing Performance & Analytics</p>
                                 </div>
                             </div>
                         </div>
@@ -60,7 +55,7 @@ function App() {
                         <MetricsCard
                             title="Total Keywords"
                             value={metricsSummary.totalKeywords.toLocaleString()}
-                            change={8.3}
+                            change={2.3}
                             icon={Search}
                             iconColor="text-blue-600"
                             iconBg="bg-blue-50"
@@ -68,7 +63,7 @@ function App() {
                         <MetricsCard
                             title="Organic Traffic"
                             value={metricsSummary.organicTraffic.toLocaleString()}
-                            change={12.4}
+                            change={-8.7}
                             icon={TrendingUp}
                             iconColor="text-emerald-600"
                             iconBg="bg-emerald-50"
@@ -76,7 +71,7 @@ function App() {
                         <MetricsCard
                             title="Top 10 Rankings"
                             value={metricsSummary.topKeywordsRanking.toLocaleString()}
-                            change={5.7}
+                            change={3.4}
                             icon={Award}
                             iconColor="text-amber-600"
                             iconBg="bg-amber-50"
@@ -92,15 +87,15 @@ function App() {
                         <MetricsCard
                             title="Traffic Value"
                             value={`$${(metricsSummary.trafficValue / 1000).toFixed(0)}K`}
-                            change={9.8}
+                            change={-6.2}
                             icon={DollarSign}
                             iconColor="text-teal-600"
                             iconBg="bg-teal-50"
                         />
                         <MetricsCard
-                            title="Monthly Ad Spend"
-                            value={`$${(metricsSummary.adSpend / 1000).toFixed(0)}K`}
-                            change={5.4}
+                            title="Paid Traffic"
+                            value={metricsSummary.adSpend.toLocaleString()}
+                            change={-61.9}
                             icon={CreditCard}
                             iconColor="text-purple-600"
                             iconBg="bg-purple-50"
@@ -109,17 +104,28 @@ function App() {
 
                     <div className="mb-6">
                         <div className="glass-card rounded-2xl shadow-2xl p-4 mb-4 border-2 border-white/20">
-                            <h2 className="text-lg font-bold text-gray-900 mb-1">Traffic & Geographic Insights</h2>
-                            <p className="text-xs text-gray-700">Monitor traffic trends across channels and geographic distribution</p>
+                            <h2 className="text-lg font-bold text-gray-900 mb-1">Traffic & Geographic</h2>
+                            <p className="text-xs text-gray-700">Monitor visitor trends, engagement metrics, and geographic distribution</p>
                         </div>
                     </div>
 
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
                         <div className="lg:col-span-2">
-                            <TrafficChart data={trafficHistory} />
+                            <TrafficTrendChart data={trafficMetrics.uniqueVisitors.map((uv, i) => ({
+                                week: `Week ${i + 1}`,
+                                uniqueVisitors: uv.value,
+                                visits: trafficMetrics.visits[i].value,
+                                bounceRate: trafficMetrics.bounceRate[i].value,
+                                avgVisitDuration: trafficMetrics.avgVisitDuration[i].value,
+                                pagesPerVisit: trafficMetrics.pagesPerVisit[i].value,
+                                purchaseConversion: trafficMetrics.purchaseConversion[i].value
+                            }))} />
                         </div>
                         <div>
-                            <GeographicDistribution data={geographicData} />
+                            <GeographicDistribution
+                                visitsData={geographicVisitsData}
+                                uniqueVisitorsData={geographicUniqueVisitorsData}
+                            />
                         </div>
                     </div>
 
@@ -155,7 +161,7 @@ function App() {
                     </div>
 
                     <div className="mb-8">
-                        <KeywordTable keywords={synopsysKeywords} maxRows={20} />
+                        <KeywordTable keywords={organicKeywords} maxRows={20} />
                     </div>
 
                     <div className="mb-6">

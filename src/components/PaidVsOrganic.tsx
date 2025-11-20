@@ -1,20 +1,12 @@
-import { TrendingUp, TrendingDown, DollarSign, Users } from 'lucide-react';
-import { AdPerformanceData } from '../data/synopsysData';
+import { DollarSign, Users } from 'lucide-react';
+import { AdPerformanceData } from '../data/realData';
 
 interface PaidVsOrganicProps {
     data: AdPerformanceData[];
 }
 
 export default function PaidVsOrganic({ data }: PaidVsOrganicProps) {
-    const latestMonth = data[data.length - 1];
-    const previousMonth = data[data.length - 2];
-
-    const paidTrafficGrowth = ((latestMonth.paidTraffic - previousMonth.paidTraffic) / previousMonth.paidTraffic) * 100;
-    const organicTrafficGrowth = ((latestMonth.organicTraffic - previousMonth.organicTraffic) / previousMonth.organicTraffic) * 100;
-
-    const maxValue = Math.max(
-        ...data.map(d => Math.max(d.paidTraffic, d.organicTraffic))
-    );
+    const currentMonth = data[0];
 
     return (
         <div className="glass-card rounded-2xl shadow-xl p-6">
@@ -31,18 +23,8 @@ export default function PaidVsOrganic({ data }: PaidVsOrganicProps) {
                         </div>
                         <span className="text-xs font-bold text-gray-600 uppercase">Organic Traffic</span>
                     </div>
-                    <p className="text-2xl font-bold text-gray-900 mb-1">{latestMonth.organicTraffic.toLocaleString()}</p>
-                    <div className="flex items-center space-x-1">
-                        {organicTrafficGrowth > 0 ? (
-                            <TrendingUp className="w-4 h-4 text-emerald-600" />
-                        ) : (
-                            <TrendingDown className="w-4 h-4 text-red-600" />
-                        )}
-                        <span className={`text-xs font-bold ${organicTrafficGrowth > 0 ? 'text-emerald-600' : 'text-red-600'}`}>
-                            {organicTrafficGrowth > 0 ? '+' : ''}{organicTrafficGrowth.toFixed(1)}%
-                        </span>
-                        <span className="text-xs text-gray-500 font-medium">vs last month</span>
-                    </div>
+                    <p className="text-2xl font-bold text-gray-900 mb-1">{currentMonth.organicTraffic.toLocaleString()}</p>
+                    <p className="text-xs text-gray-600 font-medium">November 2025</p>
                 </div>
 
                 <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl p-4 border-2 border-purple-200">
@@ -52,58 +34,56 @@ export default function PaidVsOrganic({ data }: PaidVsOrganicProps) {
                         </div>
                         <span className="text-xs font-bold text-gray-600 uppercase">Paid Traffic</span>
                     </div>
-                    <p className="text-2xl font-bold text-gray-900 mb-1">{latestMonth.paidTraffic.toLocaleString()}</p>
-                    <div className="flex items-center space-x-1">
-                        {paidTrafficGrowth > 0 ? (
-                            <TrendingUp className="w-4 h-4 text-emerald-600" />
-                        ) : (
-                            <TrendingDown className="w-4 h-4 text-red-600" />
-                        )}
-                        <span className={`text-xs font-bold ${paidTrafficGrowth > 0 ? 'text-emerald-600' : 'text-red-600'}`}>
-                            {paidTrafficGrowth > 0 ? '+' : ''}{paidTrafficGrowth.toFixed(1)}%
-                        </span>
-                        <span className="text-xs text-gray-500 font-medium">vs last month</span>
-                    </div>
+                    <p className="text-2xl font-bold text-gray-900 mb-1">{currentMonth.paidTraffic.toLocaleString()}</p>
+                    <p className="text-xs text-gray-600 font-medium">November 2025</p>
                 </div>
             </div>
 
-            <div className="space-y-4">
-                {data.map((item, index) => {
-                    const totalTraffic = item.organicTraffic + item.paidTraffic;
-                    const organicPercent = (item.organicTraffic / totalTraffic) * 100;
-                    const paidPercent = (item.paidTraffic / totalTraffic) * 100;
+            <div className="space-y-3">
+                <div className="flex items-center justify-between mb-2">
+                    <span className="text-sm font-semibold text-gray-700">{currentMonth.month}</span>
+                    <span className="text-sm font-bold text-gray-900">{(currentMonth.organicTraffic + currentMonth.paidTraffic).toLocaleString()}</span>
+                </div>
 
-                    return (
-                        <div key={index} className="space-y-2">
-                            <div className="flex items-center justify-between">
-                                <span className="text-sm font-semibold text-gray-700">{item.month}</span>
-                                <span className="text-sm font-bold text-gray-900">{totalTraffic.toLocaleString()}</span>
-                            </div>
-                            <div className="relative h-10 bg-gray-100/50 rounded-xl overflow-hidden backdrop-blur-sm">
-                                <div className="absolute inset-y-0 left-0 flex w-full">
-                                    <div
-                                        className="bg-gradient-to-br from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 transition-all cursor-pointer relative group"
-                                        style={{ width: `${organicPercent}%` }}
-                                        title={`Organic: ${item.organicTraffic.toLocaleString()}`}
-                                    >
-                                        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                                            <span className="text-xs font-bold text-white drop-shadow">{item.organicTraffic.toLocaleString()}</span>
-                                        </div>
-                                    </div>
-                                    <div
-                                        className="bg-gradient-to-br from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 transition-all cursor-pointer relative group"
-                                        style={{ width: `${paidPercent}%` }}
-                                        title={`Paid: ${item.paidTraffic.toLocaleString()}`}
-                                    >
-                                        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                                            <span className="text-xs font-bold text-white drop-shadow">{item.paidTraffic.toLocaleString()}</span>
-                                        </div>
-                                    </div>
+                <div className="space-y-3">
+                    <div className="flex items-center space-x-3">
+                        <div className="w-16 text-xs font-semibold text-gray-600">Organic</div>
+                        <div className="flex-1 relative">
+                            <div className="h-10 bg-gray-100 rounded-lg overflow-hidden">
+                                <div
+                                    className="h-full bg-blue-500 flex items-center justify-center transition-all duration-300"
+                                    style={{ width: `${(currentMonth.organicTraffic / (currentMonth.organicTraffic + currentMonth.paidTraffic)) * 100}%`, minWidth: '80px' }}
+                                >
+                                    <span className="text-sm font-bold text-white">
+                                        {currentMonth.organicTraffic.toLocaleString()}
+                                    </span>
                                 </div>
                             </div>
                         </div>
-                    );
-                })}
+                        <div className="w-20 text-right text-sm font-bold text-gray-700">
+                            {currentMonth.organicTraffic.toLocaleString()}
+                        </div>
+                    </div>
+
+                    <div className="flex items-center space-x-3">
+                        <div className="w-16 text-xs font-semibold text-gray-600">Paid</div>
+                        <div className="flex-1 relative">
+                            <div className="h-10 bg-gray-100 rounded-lg overflow-hidden">
+                                <div
+                                    className="h-full bg-pink-500 flex items-center justify-center transition-all duration-300"
+                                    style={{ width: `${(currentMonth.paidTraffic / (currentMonth.organicTraffic + currentMonth.paidTraffic)) * 100}%`, minWidth: '80px' }}
+                                >
+                                    <span className="text-sm font-bold text-white">
+                                        {currentMonth.paidTraffic.toLocaleString()}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="w-20 text-right text-sm font-bold text-gray-700">
+                            {currentMonth.paidTraffic.toLocaleString()}
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div className="flex items-center justify-center space-x-6 mt-6 pt-4 border-t-2 border-gray-200">

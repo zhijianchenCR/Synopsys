@@ -1,21 +1,17 @@
 import { TrendingUp, CircleDollarSign, Percent, Target } from 'lucide-react';
-import { AdPerformanceData } from '../data/synopsysData';
+import { AdPerformanceData } from '../data/realData';
 
 interface ROIAnalysisProps {
     data: AdPerformanceData[];
 }
 
 export default function ROIAnalysis({ data }: ROIAnalysisProps) {
-    const latestMonth = data[data.length - 1];
+    const currentMonth = data[0];
 
-    const totalAdSpend = data.reduce((sum, d) => sum + d.adSpend, 0);
-    const totalOrganicValue = data.reduce((sum, d) => sum + d.organicValue, 0);
-    const totalPaidTraffic = data.reduce((sum, d) => sum + d.paidTraffic, 0);
-
-    const roi = ((latestMonth.organicValue - latestMonth.adSpend) / latestMonth.adSpend) * 100;
-    const costPerAcquisition = latestMonth.adSpend / latestMonth.paidTraffic;
-    const organicSavings = totalOrganicValue - totalAdSpend;
-    const organicToAdRatio = latestMonth.organicValue / latestMonth.adSpend;
+    const roi = ((currentMonth.organicValue - currentMonth.adSpend) / currentMonth.adSpend) * 100;
+    const costPerAcquisition = currentMonth.adSpend / currentMonth.paidTraffic;
+    const organicSavings = currentMonth.organicValue - currentMonth.adSpend;
+    const organicToAdRatio = currentMonth.organicValue / currentMonth.adSpend;
 
     return (
         <div className="glass-card rounded-2xl shadow-xl p-6">
@@ -80,51 +76,43 @@ export default function ROIAnalysis({ data }: ROIAnalysisProps) {
                         <p className="text-sm text-gray-700 leading-relaxed mb-3">
                             Your organic traffic generates <span className="font-bold text-emerald-600">{organicToAdRatio.toFixed(1)}x</span> more value
                             than your monthly ad spend. With a <span className="font-bold text-emerald-600">{roi.toFixed(0)}%</span> ROI,
-                            you're effectively saving <span className="font-bold text-purple-600">${(organicSavings / 1000000).toFixed(2)}M</span> over
-                            6 months compared to acquiring the same traffic through paid channels.
+                            you're effectively saving <span className="font-bold text-purple-600">${organicSavings >= 1000000 ? (organicSavings / 1000000).toFixed(2) + 'M' : (organicSavings / 1000).toFixed(0) + 'K'}</span> compared to acquiring the same traffic through paid channels.
                         </p>
                         <div className="grid grid-cols-2 gap-3">
                             <div className="bg-white/60 rounded-lg p-3 border border-emerald-200">
-                                <p className="text-xs text-gray-600 font-medium mb-1">Total Ad Investment</p>
-                                <p className="text-lg font-bold text-gray-900">${(totalAdSpend / 1000).toFixed(0)}K</p>
+                                <p className="text-xs text-gray-600 font-medium mb-1">Ad Investment (Nov)</p>
+                                <p className="text-lg font-bold text-gray-900">${currentMonth.adSpend >= 1000 ? (currentMonth.adSpend / 1000).toFixed(0) + 'K' : currentMonth.adSpend.toFixed(0)}</p>
                             </div>
                             <div className="bg-white/60 rounded-lg p-3 border border-emerald-200">
                                 <p className="text-xs text-gray-600 font-medium mb-1">Organic Traffic Value</p>
-                                <p className="text-lg font-bold text-gray-900">${(totalOrganicValue / 1000000).toFixed(2)}M</p>
+                                <p className="text-lg font-bold text-gray-900">${currentMonth.organicValue >= 1000000 ? (currentMonth.organicValue / 1000000).toFixed(2) + 'M' : (currentMonth.organicValue / 1000).toFixed(0) + 'K'}</p>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div className="mt-5 space-y-3">
-                <h4 className="text-sm font-bold text-gray-900">Monthly Trend Analysis</h4>
-                {data.map((item, index) => {
-                    const monthROI = ((item.organicValue - item.adSpend) / item.adSpend) * 100;
-                    const cpa = item.adSpend / item.paidTraffic;
-
-                    return (
-                        <div key={index} className="flex items-center justify-between p-3 bg-white/50 rounded-lg border border-gray-200 hover:border-blue-300 transition-all">
-                            <div className="flex items-center space-x-3">
-                                <span className="text-sm font-semibold text-gray-700 w-24">{item.month}</span>
-                                <div className="flex items-center space-x-4">
-                                    <div>
-                                        <p className="text-xs text-gray-500">ROI</p>
-                                        <p className="text-sm font-bold text-emerald-600">{monthROI.toFixed(0)}%</p>
-                                    </div>
-                                    <div>
-                                        <p className="text-xs text-gray-500">CPA</p>
-                                        <p className="text-sm font-bold text-blue-600">${cpa.toFixed(2)}</p>
-                                    </div>
-                                </div>
+            <div className="mt-5">
+                <h4 className="text-sm font-bold text-gray-900 mb-3">Current Month Breakdown</h4>
+                <div className="flex items-center justify-between p-3 bg-white/50 rounded-lg border border-gray-200">
+                    <div className="flex items-center space-x-3">
+                        <span className="text-sm font-semibold text-gray-700 w-24">{currentMonth.month}</span>
+                        <div className="flex items-center space-x-4">
+                            <div>
+                                <p className="text-xs text-gray-500">ROI</p>
+                                <p className="text-sm font-bold text-emerald-600">{roi.toFixed(0)}%</p>
                             </div>
-                            <div className="text-right">
-                                <p className="text-xs text-gray-500">Ad Spend</p>
-                                <p className="text-sm font-bold text-gray-900">${(item.adSpend / 1000).toFixed(0)}K</p>
+                            <div>
+                                <p className="text-xs text-gray-500">CPA</p>
+                                <p className="text-sm font-bold text-blue-600">${costPerAcquisition.toFixed(2)}</p>
                             </div>
                         </div>
-                    );
-                })}
+                    </div>
+                    <div className="text-right">
+                        <p className="text-xs text-gray-500">Ad Spend</p>
+                        <p className="text-sm font-bold text-gray-900">${(currentMonth.adSpend / 1000).toFixed(0)}K</p>
+                    </div>
+                </div>
             </div>
         </div>
     );

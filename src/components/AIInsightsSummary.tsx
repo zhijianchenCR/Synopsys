@@ -40,8 +40,8 @@ const AIInsightsSummary = ({ insights }: AIInsightsSummaryProps) => {
                     <Sparkles className="w-6 h-6 text-white" />
                 </div>
                 <div>
-                    <h2 className="text-2xl font-bold text-gray-900">AI-Powered Summary</h2>
-                    <p className="text-sm text-gray-600 font-medium">Intelligent insights from your marketing data</p>
+                    <h2 className="text-2xl font-bold text-gray-900">Intelligence Insights</h2>
+                    <p className="text-sm text-gray-600 font-medium">Smart analytics from your marketing data</p>
                 </div>
             </div>
 
