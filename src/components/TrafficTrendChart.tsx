@@ -36,14 +36,14 @@ export default function TrafficTrendChart({ data }: TrafficTrendChartProps) {
     const avgConversion = data.reduce((acc, d) => acc + d.purchaseConversion, 0) / data.filter(d => d.purchaseConversion > 0).length;
 
     return (
-        <div className="glass-card rounded-2xl shadow-xl p-6">
-            <div className="mb-6">
+        <div className="glass-card rounded-2xl shadow-xl p-8">
+            <div className="mb-8">
                 <h3 className="text-lg font-bold text-gray-900 mb-2">Traffic Trend Overview</h3>
-                <p className="text-sm text-gray-600">Month-over-month visitor and engagement metrics</p>
+                <p className="text-sm text-gray-600">Weekly visitor and engagement metrics</p>
             </div>
 
-            <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 mb-6">
-                <div className="bg-gradient-to-br from-blue-50 to-blue-100/50 rounded-xl p-3 border border-blue-200/50">
+            <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
+                <div className="bg-gradient-to-br from-blue-50 to-blue-100/50 rounded-xl p-4 border border-blue-200/50">
                     <div className="flex items-center justify-between mb-1">
                         <span className="text-xs font-semibold text-blue-700">Unique Visitors</span>
                         {visitorChange < 0 ? (
@@ -60,7 +60,7 @@ export default function TrafficTrendChart({ data }: TrafficTrendChartProps) {
                     </div>
                 </div>
 
-                <div className="bg-gradient-to-br from-emerald-50 to-emerald-100/50 rounded-xl p-3 border border-emerald-200/50">
+                <div className="bg-gradient-to-br from-emerald-50 to-emerald-100/50 rounded-xl p-4 border border-emerald-200/50">
                     <div className="flex items-center justify-between mb-1">
                         <span className="text-xs font-semibold text-emerald-700">Total Visits</span>
                         {visitChange < 0 ? (
@@ -77,7 +77,7 @@ export default function TrafficTrendChart({ data }: TrafficTrendChartProps) {
                     </div>
                 </div>
 
-                <div className="bg-gradient-to-br from-amber-50 to-amber-100/50 rounded-xl p-3 border border-amber-200/50">
+                <div className="bg-gradient-to-br from-amber-50 to-amber-100/50 rounded-xl p-4 border border-amber-200/50">
                     <div className="flex items-center gap-1 mb-1">
                         <MousePointer className="w-3 h-3 text-amber-700" />
                         <span className="text-xs font-semibold text-amber-700">Avg Bounce Rate</span>
@@ -90,7 +90,7 @@ export default function TrafficTrendChart({ data }: TrafficTrendChartProps) {
                     </div>
                 </div>
 
-                <div className="bg-gradient-to-br from-violet-50 to-violet-100/50 rounded-xl p-3 border border-violet-200/50">
+                <div className="bg-gradient-to-br from-violet-50 to-violet-100/50 rounded-xl p-4 border border-violet-200/50">
                     <div className="flex items-center gap-1 mb-1">
                         <Clock className="w-3 h-3 text-violet-700" />
                         <span className="text-xs font-semibold text-violet-700">Avg Duration</span>
@@ -103,7 +103,7 @@ export default function TrafficTrendChart({ data }: TrafficTrendChartProps) {
                     </div>
                 </div>
 
-                <div className="bg-gradient-to-br from-cyan-50 to-cyan-100/50 rounded-xl p-3 border border-cyan-200/50">
+                <div className="bg-gradient-to-br from-cyan-50 to-cyan-100/50 rounded-xl p-4 border border-cyan-200/50">
                     <div className="flex items-center gap-1 mb-1">
                         <FileText className="w-3 h-3 text-cyan-700" />
                         <span className="text-xs font-semibold text-cyan-700">Pages/Visit</span>
@@ -116,7 +116,7 @@ export default function TrafficTrendChart({ data }: TrafficTrendChartProps) {
                     </div>
                 </div>
 
-                <div className="bg-gradient-to-br from-rose-50 to-rose-100/50 rounded-xl p-3 border border-rose-200/50">
+                <div className="bg-gradient-to-br from-rose-50 to-rose-100/50 rounded-xl p-4 border border-rose-200/50">
                     <div className="flex items-center gap-1 mb-1">
                         <ShoppingCart className="w-3 h-3 text-rose-700" />
                         <span className="text-xs font-semibold text-rose-700">Conversion</span>
@@ -130,7 +130,7 @@ export default function TrafficTrendChart({ data }: TrafficTrendChartProps) {
                 </div>
             </div>
 
-            <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 mb-4 text-xs">
+            <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-3 mb-6 text-xs">
                 <div className="flex items-center space-x-2">
                     <div className="w-3 h-3 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 shadow"></div>
                     <span className="font-semibold text-blue-700">Unique Visitors</span>
@@ -153,13 +153,13 @@ export default function TrafficTrendChart({ data }: TrafficTrendChartProps) {
                 </div>
             </div>
 
-            <div className="space-y-3">
+            <div className="space-y-5">
                 {data.map((item, index) => {
                     const visitorHeightPercent = (item.uniqueVisitors / maxVisitors) * 100;
                     const visitHeightPercent = (item.visits / maxVisits) * 100;
 
                     return (
-                        <div key={index} className="space-y-2">
+                        <div key={index} className="space-y-3">
                             <div className="flex items-center justify-between">
                                 <span className="text-sm font-semibold text-gray-700">{item.week}</span>
                                 <div className="flex items-center space-x-4 text-xs">
@@ -181,8 +181,8 @@ export default function TrafficTrendChart({ data }: TrafficTrendChartProps) {
                                 </div>
                             </div>
 
-                            <div className="grid grid-cols-2 gap-2">
-                                <div className="relative h-6 bg-blue-50 rounded-lg overflow-hidden">
+                            <div className="grid grid-cols-2 gap-3">
+                                <div className="relative h-8 bg-blue-50 rounded-lg overflow-hidden">
                                     <div
                                         className="absolute inset-y-0 left-0 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 transition-all cursor-pointer rounded-lg flex items-center justify-start px-2"
                                         style={{ width: `${visitorHeightPercent}%` }}
@@ -193,7 +193,7 @@ export default function TrafficTrendChart({ data }: TrafficTrendChartProps) {
                                         </span>
                                     </div>
                                 </div>
-                                <div className="relative h-6 bg-emerald-50 rounded-lg overflow-hidden">
+                                <div className="relative h-8 bg-emerald-50 rounded-lg overflow-hidden">
                                     <div
                                         className="absolute inset-y-0 left-0 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 transition-all cursor-pointer rounded-lg flex items-center justify-start px-2"
                                         style={{ width: `${visitHeightPercent}%` }}

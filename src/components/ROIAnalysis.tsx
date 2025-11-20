@@ -1,11 +1,22 @@
 import { TrendingUp, CircleDollarSign, Percent, Target } from 'lucide-react';
-import { AdPerformanceData } from '../data/realData';
+import type { AdPerformanceData } from '../types';
 
 interface ROIAnalysisProps {
     data: AdPerformanceData[];
 }
 
 export default function ROIAnalysis({ data }: ROIAnalysisProps) {
+    if (!data || data.length === 0) {
+        return (
+            <div className="glass-card rounded-2xl shadow-xl p-6">
+                <div className="mb-6">
+                    <h3 className="text-lg font-bold text-gray-900 mb-2">ROI Analysis</h3>
+                    <p className="text-sm text-gray-600">No data available</p>
+                </div>
+            </div>
+        );
+    }
+
     const currentMonth = data[data.length - 1];
 
     // Calculate marketing-friendly metrics

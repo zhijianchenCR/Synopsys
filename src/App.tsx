@@ -1,28 +1,51 @@
 import { useState } from 'react';
-import { TrendingUp, Search, Link2, DollarSign, Award, CreditCard } from 'lucide-react';
+import { TrendingUp, Search, DollarSign, Award, CreditCard } from 'lucide-react';
 import Sidebar from './components/Sidebar';
+import ChatBubble from './components/ChatBubble';
 import MetricsCard from './components/MetricsCard';
 import TrafficGeographicPage from './pages/TrafficGeographicPage';
 import KeywordPerformancePage from './pages/KeywordPerformancePage';
 import PagesCompetitivePage from './pages/PagesCompetitivePage';
+import SynopsysAIPage from './pages/SynopsysAIPage';
 import AIInsightsSummary from './components/AIInsightsSummary';
 import ActionableInsights from './components/ActionableInsights';
 import PaidVsOrganic from './components/PaidVsOrganic';
 import ROIAnalysis from './components/ROIAnalysis';
 import EmergingTrends from './components/EmergingTrends';
-import {
-    metricsSummary,
-    aiInsights,
-    actionableInsights,
-    adPerformanceData,
-} from './data/realData';
-import {
-    emergingTrends,
-    competitiveKeywordGaps,
-} from './data/competitiveIntelligence';
+import { useSEMrushData } from './hooks/useSEMrushData';
+import { calculateMetricsSummary, calculatePaidVsOrganicData, generateAIInsights, generateActionableInsights } from './utils/dataTransformer';
 
 function App() {
     const [currentPage, setCurrentPage] = useState('dashboard');
+    const { data, loading } = useSEMrushData();
+
+    const metricsSummary = calculateMetricsSummary(data);
+    const adPerformanceData = calculatePaidVsOrganicData(data);
+    const aiInsights = generateAIInsights(data);
+    const actionableInsights = generateActionableInsights(data);
+
+    const emergingTrends = [
+        'Voice Search Optimization',
+        'AI-Powered Content Creation',
+        'Video Marketing Dominance',
+        'Personalization at Scale',
+        'Privacy-First Marketing'
+    ];
+    const competitiveKeywordGaps = [
+        'cloud native solutions',
+        'api integration platform',
+        'automated testing tools',
+        'devops automation',
+        'microservices architecture'
+    ];
+
+    if (loading || !metricsSummary) {
+        return (
+            <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 flex items-center justify-center">
+                <div className="text-white text-xl">Loading Synopsys Datas...</div>
+            </div>
+        );
+    }
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 relative overflow-hidden">
@@ -44,11 +67,11 @@ function App() {
                                 Last updated: {new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
                             </div>
                         </div>
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 mb-8">
                             <MetricsCard
                                 title="Total Keywords"
                                 value={metricsSummary.totalKeywords.toLocaleString()}
-                                change={2.3}
+                                change={metricsSummary.keywordChange}
                                 icon={Search}
                                 iconColor="text-blue-600"
                                 iconBg="bg-blue-50"
@@ -56,7 +79,7 @@ function App() {
                             <MetricsCard
                                 title="Organic Traffic"
                                 value={metricsSummary.organicTraffic.toLocaleString()}
-                                change={-8.7}
+                                change={metricsSummary.visitsChange}
                                 icon={TrendingUp}
                                 iconColor="text-emerald-600"
                                 iconBg="bg-emerald-50"
@@ -64,41 +87,33 @@ function App() {
                             <MetricsCard
                                 title="Top 10 Rankings"
                                 value={metricsSummary.topKeywordsRanking.toLocaleString()}
-                                change={3.4}
+                                change={metricsSummary.top10Change}
                                 icon={Award}
                                 iconColor="text-amber-600"
                                 iconBg="bg-amber-50"
                             />
                             <MetricsCard
-                                title="Backlinks"
-                                value={metricsSummary.backlinks.toLocaleString()}
-                                change={3.2}
-                                icon={Link2}
-                                iconColor="text-orange-600"
-                                iconBg="bg-orange-50"
-                            />
-                            <MetricsCard
                                 title="Traffic Value"
                                 value={`$${(metricsSummary.trafficValue / 1000).toFixed(0)}K`}
-                                change={-6.2}
+                                change={metricsSummary.trafficValueChange}
                                 icon={DollarSign}
                                 iconColor="text-teal-600"
                                 iconBg="bg-teal-50"
                             />
                             <MetricsCard
                                 title="Paid Traffic"
-                                value={metricsSummary.adSpend.toLocaleString()}
-                                change={-61.9}
+                                value={metricsSummary.paidTraffic.toLocaleString()}
+                                change={metricsSummary.paidTrafficChange}
                                 icon={CreditCard}
-                                iconColor="text-purple-600"
-                                iconBg="bg-purple-50"
+                                iconColor="text-blue-600"
+                                iconBg="bg-blue-50"
                             />
                         </div>
 
                         <div className="mb-6">
                             <div className="glass-card rounded-2xl shadow-2xl p-4 mb-4 border-2 border-white/20">
-                                <h2 className="text-lg font-bold text-gray-900 mb-1">Ad Performance & ROI</h2>
-                                <p className="text-xs text-gray-700">Analyze advertising efficiency and return on investment metrics</p>
+                                <h2 className="text-lg font-bold text-gray-900 mb-1">Traffic Analysis</h2>
+                                <p className="text-xs text-gray-700">Compare organic and paid traffic performance across channels</p>
                             </div>
                         </div>
 
@@ -143,7 +158,10 @@ function App() {
                 {currentPage === 'traffic' && <TrafficGeographicPage />}
                 {currentPage === 'keywords' && <KeywordPerformancePage />}
                 {currentPage === 'competitive' && <PagesCompetitivePage />}
+                {currentPage === 'ai-assistant' && <SynopsysAIPage />}
             </div>
+
+            <ChatBubble />
         </div>
     );
 }

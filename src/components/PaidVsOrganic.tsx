@@ -1,11 +1,22 @@
 import { DollarSign, Users } from 'lucide-react';
-import { AdPerformanceData } from '../data/realData';
+import type { AdPerformanceData } from '../types';
 
 interface PaidVsOrganicProps {
     data: AdPerformanceData[];
 }
 
 export default function PaidVsOrganic({ data }: PaidVsOrganicProps) {
+    if (!data || data.length === 0) {
+        return (
+            <div className="glass-card rounded-2xl shadow-xl p-6">
+                <div className="mb-6">
+                    <h3 className="text-lg font-bold text-gray-900 mb-2">Paid vs Organic Traffic</h3>
+                    <p className="text-sm text-gray-600">No data available</p>
+                </div>
+            </div>
+        );
+    }
+
     const currentMonth = data[0];
 
     return (
@@ -24,7 +35,7 @@ export default function PaidVsOrganic({ data }: PaidVsOrganicProps) {
                         <span className="text-xs font-bold text-gray-600 uppercase">Organic Traffic</span>
                     </div>
                     <p className="text-2xl font-bold text-gray-900 mb-1">{currentMonth.organicTraffic.toLocaleString()}</p>
-                    <p className="text-xs text-gray-600 font-medium">November 2025</p>
+                    <p className="text-xs text-gray-600 font-medium">{currentMonth.month}</p>
                 </div>
 
                 <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl p-4 border-2 border-purple-200">
@@ -35,7 +46,7 @@ export default function PaidVsOrganic({ data }: PaidVsOrganicProps) {
                         <span className="text-xs font-bold text-gray-600 uppercase">Paid Traffic</span>
                     </div>
                     <p className="text-2xl font-bold text-gray-900 mb-1">{currentMonth.paidTraffic.toLocaleString()}</p>
-                    <p className="text-xs text-gray-600 font-medium">November 2025</p>
+                    <p className="text-xs text-gray-600 font-medium">{currentMonth.month}</p>
                 </div>
             </div>
 

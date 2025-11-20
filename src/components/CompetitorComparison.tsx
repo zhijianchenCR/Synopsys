@@ -1,5 +1,21 @@
 import { Building2, TrendingUp, AlertTriangle, CheckCircle2 } from 'lucide-react';
-import { Competitor } from '../data/competitiveIntelligence';
+
+interface Competitor {
+    name: string;
+    domain?: string;
+
+    commonKeywords?: number;
+    trafficValue?: number;
+
+    focus?: string;
+
+    strengths?: string;
+    weaknesses?: string;
+
+    marketShare?: number;
+    growthRate?: number;
+}
+
 
 interface CompetitorComparisonProps {
     competitors: Competitor[];

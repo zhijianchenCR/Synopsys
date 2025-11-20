@@ -1,10 +1,31 @@
 import KeywordTable from '../components/KeywordTable';
 import NegativeKeywords from '../components/NegativeKeywords';
 import KeywordOpportunities from '../components/KeywordOpportunities';
-import { organicKeywords } from '../data/realData';
-import { topKeywordOpportunities, negativeKeywords } from '../data/competitiveIntelligence';
+import { useSEMrushData } from '../hooks/useSEMrushData';
+import { transformOrganicKeywords, calculateKeywordOpportunities } from '../utils/dataTransformer';
 
 const KeywordPerformancePage = () => {
+    const { data, loading } = useSEMrushData();
+
+    if (loading || !data) {
+        return (
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                <div className="text-center text-white">Loading Synopsys Datas...</div>
+            </div>
+        );
+    }
+
+    const organicKeywords = transformOrganicKeywords(data);
+    const opportunities = calculateKeywordOpportunities(data);
+
+    const negativeKeywords = [
+        'free alternatives',
+        'pirated software',
+        'student version',
+        'crack download',
+        'free trial hack'
+    ];
+
     return (
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             <div className="mb-6">
@@ -26,7 +47,7 @@ const KeywordPerformancePage = () => {
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-                <KeywordOpportunities keywords={topKeywordOpportunities.slice(0, 10)} />
+                <KeywordOpportunities keywords={opportunities.slice(0, 10)} />
                 <NegativeKeywords keywords={negativeKeywords} />
             </div>
         </div>

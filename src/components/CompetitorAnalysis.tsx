@@ -1,11 +1,19 @@
-import { CompetitorData } from '../data/realData';
 import { Target, ExternalLink, DollarSign, Search, TrendingUp } from 'lucide-react';
+import type { CompetitorData } from '../types';
 
 interface CompetitorAnalysisProps {
     competitors: CompetitorData[];
 }
 
 export default function CompetitorAnalysis({ competitors }: CompetitorAnalysisProps) {
+    if (!competitors || competitors.length === 0) {
+        return (
+            <div className="glass-card rounded-2xl shadow-xl p-6">
+                <div className="text-center text-gray-600">No competitor data available</div>
+            </div>
+        );
+    }
+
     const formatCurrency = (value: number) => {
         if (value >= 1000000) {
             return `$${(value / 1000000).toFixed(1)}M`;

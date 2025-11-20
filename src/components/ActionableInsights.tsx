@@ -48,52 +48,59 @@ const ActionableInsights = ({ actions }: ActionableInsightsProps) => {
         </div>
       </div>
 
-      <div className="space-y-4">
-        {actions.map((action, index) => {
-          const styles = getPriorityStyles(action.priority);
-          return (
-            <div
-              key={index}
-              className={`bg-white/80 backdrop-blur-sm rounded-xl p-5 border-l-4 ${styles.border} shadow-md hover:shadow-xl transition-all duration-200 hover:scale-[1.01]`}
-            >
-              <div className="flex items-start justify-between mb-3">
-                <div className="flex items-center space-x-2">
-                  <div className={`w-2 h-2 rounded-full ${styles.dot} animate-pulse`}></div>
-                  <span className={`text-xs font-bold px-2.5 py-1 rounded-full border ${styles.badge}`}>
-                    {action.priority.toUpperCase()} PRIORITY
-                  </span>
-                  <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-gray-100 text-gray-700 border border-gray-300">
-                    {action.category}
-                  </span>
+      <div className="space-y-3">
+        {actions.length > 0 ? (
+          actions.slice(0, 6).map((action, index) => {
+            const styles = getPriorityStyles(action.priority);
+            return (
+              <div
+                key={index}
+                className={`bg-white/90 backdrop-blur-sm rounded-xl p-4 border-l-4 ${styles.border} shadow-sm hover:shadow-md transition-all duration-200 hover:translate-x-1`}
+              >
+                <div className="flex items-start justify-between mb-2">
+                  <div className="flex items-center space-x-2">
+                    <div className={`w-2 h-2 rounded-full ${styles.dot} animate-pulse`}></div>
+                    <span className={`text-xs font-bold px-2 py-0.5 rounded-full border ${styles.badge}`}>
+                      {action.priority.toUpperCase()} PRIORITY
+                    </span>
+                    <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-gray-100 text-gray-700 border border-gray-200">
+                      {action.category}
+                    </span>
+                  </div>
                 </div>
-              </div>
 
-              <div className="flex items-start space-x-3">
-                <CheckCircle2 className="w-5 h-5 text-emerald-600 flex-shrink-0 mt-0.5" />
-                <div className="flex-1">
-                  <p className="text-base font-bold text-gray-900 mb-2">{action.action}</p>
+                <div className="flex items-start space-x-3">
+                  <CheckCircle2 className="w-5 h-5 text-emerald-600 flex-shrink-0 mt-0.5" />
+                  <div className="flex-1">
+                    <p className="text-sm font-bold text-gray-900 mb-3 leading-snug">{action.action}</p>
 
-                  <div className="grid grid-cols-2 gap-3 mt-3">
-                    <div className="flex items-center space-x-2">
-                      <ArrowUpRight className="w-4 h-4 text-emerald-600" />
-                      <div>
-                        <p className="text-xs text-gray-500 font-medium">Impact</p>
-                        <p className="text-sm font-bold text-gray-900">{action.impact}</p>
+                    <div className="grid grid-cols-2 gap-3">
+                      <div className="flex items-center space-x-2">
+                        <ArrowUpRight className="w-4 h-4 text-emerald-600" />
+                        <div>
+                          <p className="text-xs text-gray-500 font-medium">Impact</p>
+                          <p className="text-sm font-bold text-gray-900">{action.impact}</p>
+                        </div>
                       </div>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <Clock className="w-4 h-4 text-blue-600" />
-                      <div>
-                        <p className="text-xs text-gray-500 font-medium">Effort</p>
-                        <p className="text-sm font-bold text-gray-900">{action.effort}</p>
+                      <div className="flex items-center space-x-2">
+                        <Clock className="w-4 h-4 text-blue-600" />
+                        <div>
+                          <p className="text-xs text-gray-500 font-medium">Effort</p>
+                          <p className="text-sm font-bold text-gray-900">{action.effort}</p>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
-          );
-        })}
+            );
+          })
+        ) : (
+          <div className="text-center py-8 text-gray-500">
+            <Target className="w-12 h-12 mx-auto mb-3 opacity-30" />
+            <p className="text-sm">Analyzing data to generate actionable insights...</p>
+          </div>
+        )}
       </div>
     </div>
   );

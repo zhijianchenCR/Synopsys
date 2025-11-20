@@ -1,5 +1,5 @@
-import { KeywordData } from '../data/realData';
 import { TrendingUp, TrendingDown, ArrowUp, ArrowDown, Minus, ExternalLink } from 'lucide-react';
+import type { KeywordData } from '../types';
 
 interface KeywordTableProps {
     keywords: KeywordData[];

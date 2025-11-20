@@ -16,6 +16,14 @@ interface TopPagesProps {
 }
 
 export default function TopPages({ pages }: TopPagesProps) {
+    if (!pages || pages.length === 0) {
+        return (
+            <div className="glass-card rounded-2xl shadow-xl p-6">
+                <div className="text-center text-gray-600">No page data available</div>
+            </div>
+        );
+    }
+
     const getTrafficChangeColor = (change: number) => {
         if (change > 0) return 'text-emerald-600 bg-emerald-50';
         if (change < 0) return 'text-red-600 bg-red-50';

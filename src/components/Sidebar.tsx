@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { TrendingUp, Menu, X, LayoutDashboard, Globe, Search, Users } from 'lucide-react';
+import { TrendingUp, Menu, X, LayoutDashboard, Globe, Search, Users, Bot } from 'lucide-react';
 
 interface SidebarProps {
     currentPage: string;
@@ -89,6 +89,22 @@ const Sidebar = ({ currentPage, onNavigate }: SidebarProps) => {
                             >
                                 <Users className="w-5 h-5" />
                                 <span className="font-medium">Pages & Competitive</span>
+                            </button>
+                        </div>
+
+                        <div className="text-blue-200/70 text-xs font-semibold tracking-wider uppercase mb-4 mt-8">
+                            AI Tools
+                        </div>
+                        <div className="space-y-2">
+                            <button
+                                onClick={() => onNavigate('ai-assistant')}
+                                className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-all duration-200 ${currentPage === 'ai-assistant'
+                                        ? 'bg-gradient-to-r from-blue-500/30 to-cyan-500/30 text-white border border-cyan-400/40'
+                                        : 'text-blue-200/80 hover:bg-white/5 hover:text-white'
+                                    }`}
+                            >
+                                <Bot className="w-5 h-5" />
+                                <span className="font-medium">Synopsys AI</span>
                             </button>
                         </div>
                     </nav>
