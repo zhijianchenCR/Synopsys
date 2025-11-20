@@ -1,39 +1,29 @@
-import { TrendingUp, Search, Target, Link2, DollarSign, Award, CreditCard } from 'lucide-react';
+import { useState } from 'react';
+import { TrendingUp, Search, Link2, DollarSign, Award, CreditCard } from 'lucide-react';
+import Sidebar from './components/Sidebar';
 import MetricsCard from './components/MetricsCard';
-import KeywordTable from './components/KeywordTable';
-import TrafficTrendChart from './components/TrafficTrendChart';
-import CompetitorAnalysis from './components/CompetitorAnalysis';
-import TopPages from './components/TopPages';
-import GeographicDistribution from './components/GeographicDistribution';
+import TrafficGeographicPage from './pages/TrafficGeographicPage';
+import KeywordPerformancePage from './pages/KeywordPerformancePage';
+import PagesCompetitivePage from './pages/PagesCompetitivePage';
 import AIInsightsSummary from './components/AIInsightsSummary';
 import ActionableInsights from './components/ActionableInsights';
 import PaidVsOrganic from './components/PaidVsOrganic';
 import ROIAnalysis from './components/ROIAnalysis';
-import KeywordOpportunities from './components/KeywordOpportunities';
-import CompetitorComparison from './components/CompetitorComparison';
-import NegativeKeywords from './components/NegativeKeywords';
 import EmergingTrends from './components/EmergingTrends';
 import {
-    organicKeywords,
-    competitors,
     metricsSummary,
-    topPages,
-    geographicVisitsData,
-    geographicUniqueVisitorsData,
     aiInsights,
     actionableInsights,
     adPerformanceData,
-    trafficMetrics,
 } from './data/realData';
 import {
-    competitors as competitiveCompetitors,
-    topKeywordOpportunities,
-    negativeKeywords,
     emergingTrends,
     competitiveKeywordGaps,
 } from './data/competitiveIntelligence';
 
 function App() {
+    const [currentPage, setCurrentPage] = useState('dashboard');
+
     return (
         <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 relative overflow-hidden">
             <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxkZWZzPjxwYXR0ZXJuIGlkPSJncmlkIiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiPjxwYXRoIGQ9Ik0gNDAgMCBMIDAgMCAwIDQwIiBmaWxsPSJub25lIiBzdHJva2U9InJnYmEoMjU1LDI1NSwyNTUsMC4wNSkiIHN0cm9rZS13aWR0aD0iMSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmlkKSIvPjwvc3ZnPg==')] opacity-30"></div>
@@ -42,170 +32,114 @@ function App() {
             <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-cyan-500/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
 
             <div className="relative z-10">
-                <div className="glass-dark border-b border-white/10 shadow-2xl">
+                <Sidebar currentPage={currentPage} onNavigate={setCurrentPage} />
+
+                {currentPage === 'dashboard' && (
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                        <div className="flex items-center justify-between">
-                            <div className="flex items-center space-x-5">
-                                <div className="relative">
-                                    <div className="absolute inset-0 bg-gradient-to-br from-blue-400 to-cyan-400 rounded-2xl blur-lg opacity-60"></div>
-                                    <div className="relative bg-gradient-to-br from-blue-500 to-cyan-500 p-4 rounded-2xl shadow-2xl">
-                                        <TrendingUp className="w-10 h-10 text-white" strokeWidth={2.5} />
+                        <div className="flex justify-end mb-3">
+                            <div className="text-xs text-blue-200/70 bg-white/5 px-3 py-1.5 rounded-lg border border-white/10">
+                                Last updated: {new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                            </div>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                            <MetricsCard
+                                title="Total Keywords"
+                                value={metricsSummary.totalKeywords.toLocaleString()}
+                                change={2.3}
+                                icon={Search}
+                                iconColor="text-blue-600"
+                                iconBg="bg-blue-50"
+                            />
+                            <MetricsCard
+                                title="Organic Traffic"
+                                value={metricsSummary.organicTraffic.toLocaleString()}
+                                change={-8.7}
+                                icon={TrendingUp}
+                                iconColor="text-emerald-600"
+                                iconBg="bg-emerald-50"
+                            />
+                            <MetricsCard
+                                title="Top 10 Rankings"
+                                value={metricsSummary.topKeywordsRanking.toLocaleString()}
+                                change={3.4}
+                                icon={Award}
+                                iconColor="text-amber-600"
+                                iconBg="bg-amber-50"
+                            />
+                            <MetricsCard
+                                title="Backlinks"
+                                value={metricsSummary.backlinks.toLocaleString()}
+                                change={3.2}
+                                icon={Link2}
+                                iconColor="text-orange-600"
+                                iconBg="bg-orange-50"
+                            />
+                            <MetricsCard
+                                title="Traffic Value"
+                                value={`$${(metricsSummary.trafficValue / 1000).toFixed(0)}K`}
+                                change={-6.2}
+                                icon={DollarSign}
+                                iconColor="text-teal-600"
+                                iconBg="bg-teal-50"
+                            />
+                            <MetricsCard
+                                title="Paid Traffic"
+                                value={metricsSummary.adSpend.toLocaleString()}
+                                change={-61.9}
+                                icon={CreditCard}
+                                iconColor="text-purple-600"
+                                iconBg="bg-purple-50"
+                            />
+                        </div>
+
+                        <div className="mb-6">
+                            <div className="glass-card rounded-2xl shadow-2xl p-4 mb-4 border-2 border-white/20">
+                                <h2 className="text-lg font-bold text-gray-900 mb-1">Ad Performance & ROI</h2>
+                                <p className="text-xs text-gray-700">Analyze advertising efficiency and return on investment metrics</p>
+                            </div>
+                        </div>
+
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                            <PaidVsOrganic data={adPerformanceData} />
+                            <ROIAnalysis data={adPerformanceData} />
+                        </div>
+
+                        <div className="mb-6">
+                            <div className="glass-card rounded-2xl shadow-2xl p-4 mb-4 border-2 border-white/20">
+                                <div className="flex justify-between items-start">
+                                    <div>
+                                        <h2 className="text-lg font-bold text-gray-900 mb-1">Insights & Recommendations</h2>
+                                        <p className="text-xs text-gray-700">Smart insights and recommended actions to optimize your marketing strategy</p>
                                     </div>
-                                </div>
-                                <div>
-                                    <h1 className="text-4xl font-bold bg-gradient-to-r from-white via-blue-100 to-cyan-100 bg-clip-text text-transparent tracking-tight mb-1">Synopsys</h1>
-                                    <p className="text-base text-blue-200/90 font-medium tracking-wide">Digital Marketing Performance & Analytics</p>
+                                    <div className="text-xs text-gray-600 bg-gray-100 px-3 py-1.5 rounded-lg border border-gray-200">
+                                        Updated: {new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
 
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-                        <MetricsCard
-                            title="Total Keywords"
-                            value={metricsSummary.totalKeywords.toLocaleString()}
-                            change={2.3}
-                            icon={Search}
-                            iconColor="text-blue-600"
-                            iconBg="bg-blue-50"
-                        />
-                        <MetricsCard
-                            title="Organic Traffic"
-                            value={metricsSummary.organicTraffic.toLocaleString()}
-                            change={-8.7}
-                            icon={TrendingUp}
-                            iconColor="text-emerald-600"
-                            iconBg="bg-emerald-50"
-                        />
-                        <MetricsCard
-                            title="Top 10 Rankings"
-                            value={metricsSummary.topKeywordsRanking.toLocaleString()}
-                            change={3.4}
-                            icon={Award}
-                            iconColor="text-amber-600"
-                            iconBg="bg-amber-50"
-                        />
-                        <MetricsCard
-                            title="Backlinks"
-                            value={metricsSummary.backlinks.toLocaleString()}
-                            change={3.2}
-                            icon={Link2}
-                            iconColor="text-orange-600"
-                            iconBg="bg-orange-50"
-                        />
-                        <MetricsCard
-                            title="Traffic Value"
-                            value={`$${(metricsSummary.trafficValue / 1000).toFixed(0)}K`}
-                            change={-6.2}
-                            icon={DollarSign}
-                            iconColor="text-teal-600"
-                            iconBg="bg-teal-50"
-                        />
-                        <MetricsCard
-                            title="Paid Traffic"
-                            value={metricsSummary.adSpend.toLocaleString()}
-                            change={-61.9}
-                            icon={CreditCard}
-                            iconColor="text-purple-600"
-                            iconBg="bg-purple-50"
-                        />
-                    </div>
-
-                    <div className="mb-6">
-                        <div className="glass-card rounded-2xl shadow-2xl p-4 mb-4 border-2 border-white/20">
-                            <h2 className="text-lg font-bold text-gray-900 mb-1">Traffic & Geographic</h2>
-                            <p className="text-xs text-gray-700">Monitor visitor trends, engagement metrics, and geographic distribution</p>
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                            <AIInsightsSummary insights={aiInsights} />
+                            <ActionableInsights actions={actionableInsights} />
                         </div>
-                    </div>
 
-                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-                        <div className="lg:col-span-2">
-                            <TrafficTrendChart data={trafficMetrics.uniqueVisitors.map((uv, i) => ({
-                                week: `Week ${i + 1}`,
-                                uniqueVisitors: uv.value,
-                                visits: trafficMetrics.visits[i].value,
-                                bounceRate: trafficMetrics.bounceRate[i].value,
-                                avgVisitDuration: trafficMetrics.avgVisitDuration[i].value,
-                                pagesPerVisit: trafficMetrics.pagesPerVisit[i].value,
-                                purchaseConversion: trafficMetrics.purchaseConversion[i].value
-                            }))} />
+                        <div className="mb-6">
+                            <div className="glass-card rounded-2xl shadow-2xl p-4 mb-4 border-2 border-white/20">
+                                <h2 className="text-lg font-bold text-gray-900 mb-1">Strategy</h2>
+                                <p className="text-xs text-gray-700">Emerging trends and competitive keyword gaps to capitalize on</p>
+                            </div>
                         </div>
-                        <div>
-                            <GeographicDistribution
-                                visitsData={geographicVisitsData}
-                                uniqueVisitorsData={geographicUniqueVisitorsData}
-                            />
+
+                        <div className="grid grid-cols-1 gap-6 mb-8">
+                            <EmergingTrends trends={emergingTrends} competitiveGaps={competitiveKeywordGaps} />
                         </div>
+
                     </div>
+                )}
 
-                    <div className="mb-6">
-                        <div className="glass-card rounded-2xl shadow-2xl p-4 mb-4 border-2 border-white/20">
-                            <h2 className="text-lg font-bold text-gray-900 mb-1">Ad Performance & ROI</h2>
-                            <p className="text-xs text-gray-700">Analyze advertising efficiency and return on investment metrics</p>
-                        </div>
-                    </div>
-
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-                        <PaidVsOrganic data={adPerformanceData} />
-                        <ROIAnalysis data={adPerformanceData} />
-                    </div>
-
-                    <div className="mb-6">
-                        <div className="glass-card rounded-2xl shadow-2xl p-4 mb-4 border-2 border-white/20">
-                            <h2 className="text-lg font-bold text-gray-900 mb-1">AI-Powered Intelligence</h2>
-                            <p className="text-xs text-gray-700">Smart insights and recommended actions to optimize your marketing strategy</p>
-                        </div>
-                    </div>
-
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-                        <AIInsightsSummary insights={aiInsights} />
-                        <ActionableInsights actions={actionableInsights} />
-                    </div>
-
-                    <div className="mb-6">
-                        <div className="glass-card rounded-2xl shadow-2xl p-4 mb-4 border-2 border-white/20">
-                            <h2 className="text-lg font-bold text-gray-900 mb-1">Keyword Performance</h2>
-                            <p className="text-xs text-gray-700">Track ranking positions, search volume, and traffic value for top keywords</p>
-                        </div>
-                    </div>
-
-                    <div className="mb-8">
-                        <KeywordTable keywords={organicKeywords} maxRows={20} />
-                    </div>
-
-                    <div className="mb-6">
-                        <div className="glass-card rounded-2xl shadow-2xl p-4 mb-4 border-2 border-white/20">
-                            <h2 className="text-lg font-bold text-gray-900 mb-1">Pages & Competitive Landscape</h2>
-                            <p className="text-xs text-gray-700">Analyze top-performing pages and benchmark against key competitors</p>
-                        </div>
-                    </div>
-
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-                        <TopPages pages={topPages} />
-                        <CompetitorAnalysis competitors={competitors} />
-                    </div>
-
-                    <div className="mb-6">
-                        <div className="glass-card rounded-2xl shadow-2xl p-4 mb-4 border-2 border-white/20">
-                            <h2 className="text-lg font-bold text-gray-900 mb-1">Competitive Intelligence & Strategy</h2>
-                            <p className="text-xs text-gray-700">Deep competitive analysis, keyword opportunities, and strategic recommendations</p>
-                        </div>
-                    </div>
-
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-                        <CompetitorComparison competitors={competitiveCompetitors} />
-                        <KeywordOpportunities keywords={topKeywordOpportunities.slice(0, 10)} />
-                    </div>
-
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-                        <EmergingTrends trends={emergingTrends} competitiveGaps={competitiveKeywordGaps} />
-                        <NegativeKeywords keywords={negativeKeywords} />
-                    </div>
-
-                </div>
-
+                {currentPage === 'traffic' && <TrafficGeographicPage />}
+                {currentPage === 'keywords' && <KeywordPerformancePage />}
+                {currentPage === 'competitive' && <PagesCompetitivePage />}
             </div>
         </div>
     );
