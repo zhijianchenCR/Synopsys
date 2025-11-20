@@ -36,7 +36,10 @@ function App() {
 
                 {currentPage === 'dashboard' && (
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                        <div className="flex justify-end mb-3">
+                        <div className="flex justify-between items-center mb-3">
+                            <div className="text-xs text-amber-200 bg-amber-500/10 px-3 py-1.5 rounded-lg border border-amber-500/30 font-medium">
+                                Data Period: October - November 2025
+                            </div>
                             <div className="text-xs text-blue-200/70 bg-white/5 px-3 py-1.5 rounded-lg border border-white/10">
                                 Last updated: {new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
                             </div>

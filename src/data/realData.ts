@@ -121,41 +121,6 @@ export const paidKeywords: KeywordData[] = [
 
 export const trafficHistory: TrafficData[] = [
     {
-        month: 'May 2025',
-        organicTraffic: 367302,
-        paidTraffic: 21,
-        directTraffic: 0,
-        referralTraffic: 0
-    },
-    {
-        month: 'Jun 2025',
-        organicTraffic: 292055,
-        paidTraffic: 21,
-        directTraffic: 0,
-        referralTraffic: 0
-    },
-    {
-        month: 'Jul 2025',
-        organicTraffic: 389713,
-        paidTraffic: 21,
-        directTraffic: 0,
-        referralTraffic: 0
-    },
-    {
-        month: 'Aug 2025',
-        organicTraffic: 291313,
-        paidTraffic: 21,
-        directTraffic: 0,
-        referralTraffic: 0
-    },
-    {
-        month: 'Sep 2025',
-        organicTraffic: 257161,
-        paidTraffic: 21,
-        directTraffic: 0,
-        referralTraffic: 0
-    },
-    {
         month: 'Oct 2025',
         organicTraffic: 250977,
         paidTraffic: 21,
@@ -201,11 +166,18 @@ const calculateAdPerformance = () => {
 
     return [
         {
+            month: 'Oct 2025',
+            adSpend: Math.round(novPaidCost),
+            organicValue: Math.round(novOrganicValue),
+            paidTraffic: novPaidTraffic,
+            organicTraffic: trafficHistory[0].organicTraffic
+        },
+        {
             month: 'Nov 2025',
             adSpend: Math.round(novPaidCost),
             organicValue: Math.round(novOrganicValue),
             paidTraffic: novPaidTraffic,
-            organicTraffic: trafficHistory[6].organicTraffic
+            organicTraffic: trafficHistory[1].organicTraffic
         }
     ];
 };
@@ -243,56 +215,26 @@ export const geographicUniqueVisitorsData = [
 
 export const trafficMetrics = {
     uniqueVisitors: [
-        { month: 'May 2025', value: 367302 },
-        { month: 'Jun 2025', value: 292055 },
-        { month: 'Jul 2025', value: 389713 },
-        { month: 'Aug 2025', value: 291313 },
-        { month: 'Sep 2025', value: 257161 },
         { month: 'Oct 2025', value: 250977 },
         { month: 'Nov 2025', value: 205168 }
     ],
     visits: [
-        { month: 'May 2025', value: 835658 },
-        { month: 'Jun 2025', value: 643934 },
-        { month: 'Jul 2025', value: 802731 },
-        { month: 'Aug 2025', value: 587929 },
-        { month: 'Sep 2025', value: 527145 },
         { month: 'Oct 2025', value: 531464 },
         { month: 'Nov 2025', value: 460075 }
     ],
     bounceRate: [
-        { month: 'May 2025', value: 57.72 },
-        { month: 'Jun 2025', value: 50.62 },
-        { month: 'Jul 2025', value: 50.85 },
-        { month: 'Aug 2025', value: 50.21 },
-        { month: 'Sep 2025', value: 48.63 },
         { month: 'Oct 2025', value: 50.03 },
         { month: 'Nov 2025', value: 43.38 }
     ],
     avgVisitDuration: [
-        { month: 'May 2025', value: 713 },
-        { month: 'Jun 2025', value: 881 },
-        { month: 'Jul 2025', value: 760 },
-        { month: 'Aug 2025', value: 737 },
-        { month: 'Sep 2025', value: 658 },
         { month: 'Oct 2025', value: 747 },
         { month: 'Nov 2025', value: 589 }
     ],
     pagesPerVisit: [
-        { month: 'May 2025', value: 4.05 },
-        { month: 'Jun 2025', value: 5.56 },
-        { month: 'Jul 2025', value: 4.65 },
-        { month: 'Aug 2025', value: 4.54 },
-        { month: 'Sep 2025', value: 4.20 },
         { month: 'Oct 2025', value: 4.49 },
         { month: 'Nov 2025', value: 5.04 }
     ],
     purchaseConversion: [
-        { month: 'May 2025', value: 0.02 },
-        { month: 'Jun 2025', value: 0 },
-        { month: 'Jul 2025', value: 0.01 },
-        { month: 'Aug 2025', value: 0.91 },
-        { month: 'Sep 2025', value: 0.74 },
         { month: 'Oct 2025', value: 0.02 },
         { month: 'Nov 2025', value: 0 }
     ]
@@ -301,8 +243,8 @@ export const trafficMetrics = {
 export const aiInsights = [
     {
         type: 'warning' as const,
-        title: 'Critical Traffic Decline: 44% Drop in 4 Months',
-        description: 'Unique visitors plummeted from 389.7K (July) to 205.2K (November). Traffic value declined 8.7% despite maintaining 30.4K keywords. This sharp decline coincides with -61.9% paid traffic reduction, suggesting a shift in digital strategy or market conditions requiring immediate investigation.'
+        title: 'Month-Over-Month Traffic Decline: 18.2% Drop',
+        description: 'Unique visitors declined from 251K (October) to 205K (November) - a loss of 46K visitors in one month. This coincides with minimal paid traffic (21 visitors), suggesting heavy reliance on organic search. Immediate investigation needed to identify causes.'
     },
     {
         type: 'positive' as const,
@@ -311,8 +253,8 @@ export const aiInsights = [
     },
     {
         type: 'positive' as const,
-        title: 'Engagement Quality Improving Despite Traffic Loss',
-        description: 'Bounce rate improved 25% (57.7% → 43.4%), average pages per visit increased to 5.04, and visit duration remains healthy at 9:49. This suggests content quality is strong and retaining engaged visitors even as overall traffic decreases.'
+        title: 'Engagement Quality Improving',
+        description: 'Bounce rate improved from 50.03% to 43.38% (13% improvement), and average pages per visit increased from 4.49 to 5.04. Visit duration decreased slightly but remains healthy. This suggests content quality is strong and visitors are more engaged.'
     },
     {
         type: 'warning' as const,
@@ -322,14 +264,14 @@ export const aiInsights = [
     {
         type: 'neutral' as const,
         title: 'Competitor Keyword Overlap Presents Growth Opportunity',
-        description: 'Significant overlap with Ansys (858 common keywords, $50.5K traffic value) and Cadence (690 keywords, $17.5K value). With 1.02M backlinks and strong domain authority, there\'s opportunity to capture more share in contested spaces like semiconductor IP, verification, and automotive electronics.'
+        description: 'Significant overlap with Ansys (858 common keywords, $357K traffic value) and Cadence (690 keywords, $302K value). With 127.5K backlinks and DA 84, there\'s opportunity to capture more share in contested spaces like semiconductor IP, verification, and automotive electronics.'
     }
 ];
 
 export const actionableInsights = [
     {
         priority: 'high' as const,
-        action: 'Conduct comprehensive traffic decline audit covering Google algorithm updates (July-Nov), technical SEO issues, Core Web Vitals, mobile performance, and competitor movements. The 44% drop (-184K visitors) coinciding with 61.9% paid traffic reduction suggests coordinated digital strategy changes.',
+        action: 'Conduct comprehensive traffic decline audit covering Google algorithm updates (Oct-Nov), technical SEO issues, Core Web Vitals, mobile performance, and competitor movements. The 18.2% month-over-month drop (-46K visitors) requires immediate investigation to prevent further decline.',
         impact: 'Critical',
         effort: 'High',
         category: 'Emergency Audit'

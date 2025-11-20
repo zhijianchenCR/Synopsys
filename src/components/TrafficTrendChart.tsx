@@ -39,7 +39,7 @@ export default function TrafficTrendChart({ data }: TrafficTrendChartProps) {
         <div className="glass-card rounded-2xl shadow-xl p-6">
             <div className="mb-6">
                 <h3 className="text-lg font-bold text-gray-900 mb-2">Traffic Trend Overview</h3>
-                <p className="text-sm text-gray-600">Weekly visitor and engagement metrics</p>
+                <p className="text-sm text-gray-600">Month-over-month visitor and engagement metrics</p>
             </div>
 
             <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 mb-6">

@@ -11,15 +11,22 @@ const TrafficGeographicPage = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             <div className="mb-6">
                 <div className="glass-card rounded-2xl shadow-2xl p-4 mb-4 border-2 border-white/20">
-                    <h2 className="text-lg font-bold text-gray-900 mb-1">Traffic & Geographic</h2>
-                    <p className="text-xs text-gray-700">Monitor visitor trends, engagement metrics, and geographic distribution</p>
+                    <div className="flex justify-between items-center">
+                        <div>
+                            <h2 className="text-lg font-bold text-gray-900 mb-1">Traffic & Geographic</h2>
+                            <p className="text-xs text-gray-700">Monitor visitor trends, engagement metrics, and geographic distribution</p>
+                        </div>
+                        <div className="text-xs text-amber-700 bg-amber-50 px-3 py-1.5 rounded-lg border border-amber-200 font-medium">
+                            Oct - Nov 2025
+                        </div>
+                    </div>
                 </div>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
                 <div className="lg:col-span-2">
                     <TrafficTrendChart data={trafficMetrics.uniqueVisitors.map((uv, i) => ({
-                        week: `Week ${i + 1}`,
+                        week: uv.month,
                         uniqueVisitors: uv.value,
                         visits: trafficMetrics.visits[i].value,
                         bounceRate: trafficMetrics.bounceRate[i].value,
