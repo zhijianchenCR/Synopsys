@@ -9,6 +9,10 @@ import AIInsightsSummary from './components/AIInsightsSummary';
 import ActionableInsights from './components/ActionableInsights';
 import PaidVsOrganic from './components/PaidVsOrganic';
 import ROIAnalysis from './components/ROIAnalysis';
+import KeywordOpportunities from './components/KeywordOpportunities';
+import CompetitorComparison from './components/CompetitorComparison';
+import NegativeKeywords from './components/NegativeKeywords';
+import EmergingTrends from './components/EmergingTrends';
 import {
     organicKeywords,
     competitors,
@@ -21,6 +25,13 @@ import {
     adPerformanceData,
     trafficMetrics,
 } from './data/realData';
+import {
+    competitors as competitiveCompetitors,
+    topKeywordOpportunities,
+    negativeKeywords,
+    emergingTrends,
+    competitiveKeywordGaps,
+} from './data/competitiveIntelligence';
 
 function App() {
     return (
@@ -174,6 +185,23 @@ function App() {
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
                         <TopPages pages={topPages} />
                         <CompetitorAnalysis competitors={competitors} />
+                    </div>
+
+                    <div className="mb-6">
+                        <div className="glass-card rounded-2xl shadow-2xl p-4 mb-4 border-2 border-white/20">
+                            <h2 className="text-lg font-bold text-gray-900 mb-1">Competitive Intelligence & Strategy</h2>
+                            <p className="text-xs text-gray-700">Deep competitive analysis, keyword opportunities, and strategic recommendations</p>
+                        </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                        <CompetitorComparison competitors={competitiveCompetitors} />
+                        <KeywordOpportunities keywords={topKeywordOpportunities.slice(0, 10)} />
+                    </div>
+
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                        <EmergingTrends trends={emergingTrends} competitiveGaps={competitiveKeywordGaps} />
+                        <NegativeKeywords keywords={negativeKeywords} />
                     </div>
 
                 </div>
