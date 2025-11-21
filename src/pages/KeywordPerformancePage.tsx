@@ -1,6 +1,7 @@
 import KeywordTable from '../components/KeywordTable';
 import NegativeKeywords from '../components/NegativeKeywords';
 import KeywordOpportunities from '../components/KeywordOpportunities';
+import KeywordRemedialActions from '../components/KeywordRemedialActions';
 import { useSEMrushData } from '../hooks/useSEMrushData';
 import { transformOrganicKeywords, calculateKeywordOpportunities } from '../utils/dataTransformer';
 
@@ -36,7 +37,18 @@ const KeywordPerformancePage = () => {
             </div>
 
             <div className="mb-8">
-                <KeywordTable keywords={organicKeywords} maxRows={20} />
+                <KeywordTable keywords={organicKeywords} maxRows={50} />
+            </div>
+
+            <div className="mb-6">
+                <div className="glass-card rounded-2xl shadow-2xl p-4 mb-4 border-2 border-white/20">
+                    <h2 className="text-lg font-bold text-gray-900 mb-1">Actions & Recommendations</h2>
+                    <p className="text-xs text-gray-700">Automated analysis of keyword performance with actionable recommendations</p>
+                </div>
+            </div>
+
+            <div className="mb-8">
+                <KeywordRemedialActions keywords={organicKeywords} />
             </div>
 
             <div className="mb-6">

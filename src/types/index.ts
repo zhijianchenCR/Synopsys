@@ -1,18 +1,24 @@
 export interface KeywordData {
+    title: string;
+    description: string;
     keyword: string;
-    volume: number;
-    difficulty: number;
-    cpc: number;
-    trend: number[];
     position: number;
     previousPosition: number;
+    volume: number;
+    cpc: number;
+    visibleUrl: string;
+    url: string;
     traffic: number;
     trafficPercentage: number;
     trafficCost: number;
+    trafficCostPercentage: number;
     competition: number;
-    url: string;
-    serpFeatures: string;
-    intent: string;
+    numberOfResults: number;
+    trend: number[];
+    lastSeen: string;
+    difficulty: number;
+    serpFeatures?: string;
+    intent?: string;
     positionChange?: number;
 }
 

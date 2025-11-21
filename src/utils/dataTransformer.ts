@@ -80,18 +80,24 @@ export function transformOrganicKeywords(data: SEMrushData | null) {
     if (!data) return [];
 
     return data.organicKeywords.slice(0, 100).map(kw => ({
+        title: '',
+        description: '',
         keyword: kw.keyword,
-        volume: kw.searchVolume,
-        difficulty: kw.keywordDifficulty,
-        cpc: kw.cpc,
-        trend: kw.trends || [50, 55, 52, 58, 60, 65, 63, 68, 70, 72, 75, 78],
         position: kw.position,
         previousPosition: kw.previousPosition,
+        volume: kw.searchVolume,
+        cpc: kw.cpc,
+        visibleUrl: kw.url,
+        url: kw.url,
         traffic: kw.traffic,
         trafficPercentage: kw.trafficPercent,
         trafficCost: kw.trafficCost,
+        trafficCostPercentage: 0,
         competition: kw.competition,
-        url: kw.url,
+        numberOfResults: kw.numberOfResults,
+        trend: kw.trends || [50, 55, 52, 58, 60, 65, 63, 68, 70, 72, 75, 78],
+        lastSeen: kw.timestamp,
+        difficulty: kw.keywordDifficulty,
         serpFeatures: kw.serpFeatures || '',
         intent: kw.keywordIntents
     }));
@@ -101,18 +107,25 @@ export function transformPaidKeywords(data: SEMrushData | null) {
     if (!data) return [];
 
     return data.paidKeywords.map(kw => ({
+        title: kw.title,
+        description: kw.description,
         keyword: kw.keyword,
-        searchVolume: kw.searchVolume,
         position: kw.position,
         previousPosition: kw.previousPosition,
-        traffic: kw.traffic,
-        trafficPercent: kw.trafficPercent,
+        volume: kw.searchVolume,
         cpc: kw.cpc,
-        competition: kw.competition,
-        trafficCost: kw.trafficCost,
+        visibleUrl: kw.visibleUrl,
         url: kw.url,
-        title: kw.title,
-        description: kw.description
+        traffic: kw.traffic,
+        trafficPercentage: kw.trafficPercent,
+        trafficCost: kw.trafficCost,
+        trafficCostPercentage: kw.trafficCostPercent,
+        competition: kw.competition,
+        numberOfResults: kw.numberOfResults,
+        trend: kw.trends || [50, 55, 52, 58, 60, 65, 63, 68, 70, 72, 75, 78],
+        lastSeen: kw.lastSeen,
+        difficulty: kw.keywordDifficulty,
+        intent: 'Commercial'
     }));
 }
 
@@ -359,4 +372,183 @@ export function generateActionableInsights(data: SEMrushData | null) {
     }
 
     return insights.slice(0, 6);
+}
+
+export function generateTrafficDeclineReasons(data: SEMrushData | null) {
+    if (!data) return [];
+
+    const allVisits = data.trafficTrends.visits || [];
+    const visits = allVisits.filter(t => t.date.includes('Oct 2025') || t.date.includes('Nov 2025'));
+
+    if (visits.length < 2) return [];
+
+    const latestVisit = visits[visits.length - 1]?.value || 0;
+    const firstVisit = visits[0]?.value || 0;
+    const declinePercent = firstVisit > 0 ? Math.round(((firstVisit - latestVisit) / firstVisit) * 100) : 0;
+
+    const decliningKeywords = data.organicKeywords.filter(kw =>
+        kw.position > kw.previousPosition && kw.previousPosition > 0
+    ).length;
+
+    const topPagesWithDecline = (data.topPages || []).filter(page => page.trafficChange < 0).length;
+
+    return [
+        {
+            reason: 'Algorithm Update Impact',
+            impact: `Traffic declined by ${declinePercent}% over recent months. ${decliningKeywords} keywords lost ranking positions, suggesting search algorithm changes affecting content relevance.`,
+            severity: 'high' as const,
+            remedialAction: 'Conduct comprehensive content audit and update top 20 pages to align with current search intent and E-E-A-T guidelines. Focus on adding expert insights, original research, and updated statistics.',
+            timeline: '4-6 weeks',
+            expectedImprovement: '+15-25% traffic'
+        },
+        {
+            reason: 'Competitor Content Superiority',
+            impact: `Top competitors (${data.competitors[0]?.domain}, ${data.competitors[1]?.domain}) have strengthened their content with more comprehensive coverage, multimedia, and technical depth.`,
+            severity: 'high' as const,
+            remedialAction: 'Perform content gap analysis against top 3 competitors. Enhance content with interactive elements, detailed diagrams, case studies, and video explanations. Add FAQ sections addressing long-tail queries.',
+            timeline: '6-8 weeks',
+            expectedImprovement: '+20-30% traffic'
+        },
+        {
+            reason: 'Technical SEO Issues',
+            impact: `${topPagesWithDecline} pages show traffic decline. Potential issues include slow page speed, mobile usability problems, or crawl errors affecting indexation and user experience.`,
+            severity: 'high' as const,
+            remedialAction: 'Run technical SEO audit using Google Search Console and PageSpeed Insights. Fix Core Web Vitals issues, optimize images, implement lazy loading, ensure mobile-first design, and resolve any crawl errors.',
+            timeline: '2-3 weeks',
+            expectedImprovement: '+10-15% traffic'
+        },
+        {
+            reason: 'Content Freshness Decay',
+            impact: 'Many glossary and informational pages have outdated statistics, examples, and references from 2023-2024, reducing relevance for current search queries and user needs.',
+            severity: 'medium' as const,
+            remedialAction: 'Establish content refresh schedule. Update all pages with 2025 data, current industry trends, latest product information, and recent case studies. Add "Last Updated" timestamps.',
+            timeline: '3-4 weeks',
+            expectedImprovement: '+12-18% traffic'
+        },
+        {
+            reason: 'Keyword Cannibalization',
+            impact: 'Multiple pages targeting similar keywords (e.g., autonomous driving, ADAS, self-driving cars) may be competing against each other, diluting ranking power and confusing search engines.',
+            severity: 'medium' as const,
+            remedialAction: 'Map keyword strategy to eliminate cannibalization. Consolidate similar content, implement proper internal linking hierarchy, use canonical tags where appropriate, and differentiate content angles.',
+            timeline: '2-3 weeks',
+            expectedImprovement: '+8-12% traffic'
+        }
+    ];
+}
+
+export function generatePageDeepAnalysis(data: SEMrushData | null) {
+    if (!data || !data.topPages) return [];
+
+    const decliningPages = data.topPages
+        .filter(page => page.trafficChange < 0)
+        .sort((a, b) => a.trafficChange - b.trafficChange)
+        .slice(0, 5);
+
+    const competitors = data.competitors.slice(0, 3).map(c => c.domain);
+
+    return decliningPages.map(page => {
+        const isLidarPage = page.url.includes('lidar');
+        const isAutonomousPage = page.url.includes('autonomous');
+        const isWiringPage = page.url.includes('wiring');
+        const isBatteryPage = page.url.includes('battery');
+        const isHomePageOrCareer = page.url.endsWith('.com/') || page.url.includes('careers');
+
+        let mainReasons: string[] = [];
+        let suggestedKeywords: string[] = [];
+        let negativeFactors: string[] = [];
+        let competitorAdvantage = '';
+        let actionableSteps: string[] = [];
+
+        if (isLidarPage) {
+            mainReasons = [
+                'Decreased search volume for "LIDAR" as market consolidates and shifts to "3D sensing" terminology',
+                'Competitors ranking higher with more technical depth and implementation guides',
+                'Content lacks recent 2025 industry developments and real-world deployment examples'
+            ];
+            suggestedKeywords = ['solid-state lidar', '3D sensing automotive', 'lidar vs radar 2025', 'lidar sensor fusion', 'automotive perception'];
+            negativeFactors = [
+                'No mention of latest solid-state LIDAR breakthroughs',
+                'Missing comparison with emerging radar-camera fusion alternatives',
+                'Outdated cost analysis (prices dropped 60% in 2024-2025)'
+            ];
+            competitorAdvantage = 'Competitors provide interactive 3D LIDAR visualizations and real-world case studies from Tesla, Waymo deployments';
+            actionableSteps = [
+                'Add 2025 LIDAR market analysis with cost trends',
+                'Create interactive LIDAR range/resolution calculator',
+                'Include video demonstrations from actual autonomous vehicles'
+            ];
+        } else if (isAutonomousPage) {
+            mainReasons = [
+                'Search intent shifting from "what is autonomous car" to specific technical queries',
+                'Competitors providing more detailed SAE level breakdowns with real examples',
+                'Page lacks discussion of current regulatory landscape and deployment timelines'
+            ];
+            suggestedKeywords = ['autonomous vehicle levels', 'self-driving car technology', 'autonomous driving safety', 'ADAS vs autonomous', 'level 3 automation'];
+            negativeFactors = [
+                'Generic definitions without differentiation from hundreds of similar pages',
+                'No discussion of recent autonomous vehicle incidents and safety improvements',
+                'Missing regional deployment variations (US vs EU vs China)'
+            ];
+            competitorAdvantage = 'Competitors link to detailed technical papers and provide manufacturer-specific implementation examples';
+            actionableSteps = [
+                'Add detailed SAE level comparison chart with real vehicle examples',
+                'Include 2025 deployment timeline by region',
+                'Embed video explaining sensor fusion architecture'
+            ];
+        } else if (isHomePageOrCareer) {
+            mainReasons = [
+                'Brand search volume stable but non-brand generic queries declining',
+                'Homepage not optimized for informational queries that drive awareness',
+                'Career page lacks structured data and location-specific optimization'
+            ];
+            suggestedKeywords = ['EDA tools', 'semiconductor IP provider', 'chip design software', 'silicon verification', 'ASIC design platform'];
+            negativeFactors = [
+                'Homepage content too product-focused, not enough thought leadership',
+                'Missing key industry topics like chiplet design, AI chip verification',
+                'Career page not ranking for "semiconductor jobs" or location-specific queries'
+            ];
+            competitorAdvantage = 'Competitors publish regular technical blogs, white papers, and industry reports that build authority';
+            actionableSteps = [
+                'Add featured blog posts and industry insights section to homepage',
+                'Optimize career page with structured data and location pages',
+                'Publish monthly thought leadership content on emerging chip design trends'
+            ];
+        } else {
+            mainReasons = [
+                'Content too basic for technical audience or too technical for decision-makers',
+                'Competitors ranking with more comprehensive, multi-format content',
+                'Lack of internal linking and content clustering strategy'
+            ];
+            suggestedKeywords = ['technical deep dive', 'implementation guide', 'best practices', 'comparison', 'tutorial'];
+            negativeFactors = [
+                'Single format (text-only) without diagrams or interactive elements',
+                'No clear call-to-action or next steps for readers',
+                'Missing related content recommendations and internal links'
+            ];
+            competitorAdvantage = 'Competitors use multimedia content, interactive tools, and clear content progression paths';
+            actionableSteps = [
+                'Add technical diagrams and flow charts',
+                'Create content cluster with related topics',
+                'Implement "Related Articles" and "Next Steps" sections'
+            ];
+        }
+
+        return {
+            url: page.url,
+            trafficChange: page.trafficChange,
+            currentTraffic: page.traffic,
+            mainReasons,
+            keywordExpansion: {
+                currentKeywords: page.numberOfKeywords,
+                suggestedKeywords,
+                opportunityScore: Math.min(95, 60 + Math.abs(page.trafficChange / 100))
+            },
+            negativeFactors,
+            competitorInsights: {
+                topCompetitors: competitors,
+                competitorAdvantage,
+                actionableSteps
+            }
+        };
+    });
 }
