@@ -30,7 +30,7 @@ const PageDeepAnalysis = ({ pages }: PageDeepAnalysisProps) => {
                     <FileText className="w-6 h-6 text-white" />
                 </div>
                 <div>
-                    <h2 className="text-2xl font-bold text-gray-900">Deep Page Analysis</h2>
+                    <h2 className="text-2xl font-bold text-gray-900">Page Analysis</h2>
                     <p className="text-sm text-gray-600 font-medium">AI-powered insights for declining pages with competitive intelligence</p>
                 </div>
             </div>
