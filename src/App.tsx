@@ -12,6 +12,7 @@ import ActionableInsights from './components/ActionableInsights';
 import PaidVsOrganic from './components/PaidVsOrganic';
 import ROIAnalysis from './components/ROIAnalysis';
 import EmergingTrends from './components/EmergingTrends';
+import CompetitorKeywordGapTable from './components/CompetitorKeywordGapTable';
 import { useSEMrushData } from './hooks/useSEMrushData';
 import { calculateMetricsSummary, calculatePaidVsOrganicData, generateAIInsights, generateActionableInsights } from './utils/dataTransformer';
 
@@ -139,6 +140,17 @@ function App() {
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
                             <AIInsightsSummary insights={aiInsights} />
                             <ActionableInsights actions={actionableInsights} />
+                        </div>
+
+                        <div className="mb-6">
+                            <div className="glass-card rounded-2xl shadow-2xl p-4 mb-4 border-2 border-white/20">
+                                <h2 className="text-lg font-bold text-gray-900 mb-1">Competitive Intelligence</h2>
+                                <p className="text-xs text-gray-700">Real-time keyword gap analysis and competitive positioning insights</p>
+                            </div>
+                        </div>
+
+                        <div className="grid grid-cols-1 gap-6 mb-8">
+                            <CompetitorKeywordGapTable />
                         </div>
 
                         <div className="mb-6">
