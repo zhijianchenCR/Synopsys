@@ -104,7 +104,7 @@ const Sidebar = ({ currentPage, onNavigate }: SidebarProps) => {
                                     }`}
                             >
                                 <Bot className="w-5 h-5" />
-                                <span className="font-medium">Synopsys AI</span>
+                                <span className="font-medium">Synopsys Chatbot</span>
                             </button>
                         </div>
                     </nav>
