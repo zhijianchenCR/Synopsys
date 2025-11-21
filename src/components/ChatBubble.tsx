@@ -33,7 +33,7 @@ const ChatBubble = () => {
     const [messages, setMessages] = useState<Message[]>([
         {
             role: 'assistant',
-            content: "Hello! I'm Synopsys AI, your intelligent marketing analytics assistant. I can help you understand your SEMrush data, identify opportunities, and provide strategic insights. Ask me anything!"
+            content: "Hello! I'm Synopsys Chatbot, your intelligent marketing analytics assistant. I can help you understand your SEMrush data, identify opportunities, and provide strategic insights. Ask me anything!"
         }
     ]);
     const [input, setInput] = useState('');
@@ -90,7 +90,7 @@ const ChatBubble = () => {
                 topCompetitors: data.competitors.slice(0, 5)
             }) : '{}';
 
-            const systemPrompt = `You are Synopsys AI, an expert marketing analytics assistant for the Synopsys.com website.
+            const systemPrompt = `You are Synopsys Chatbot, an expert marketing analytics assistant for the Synopsys.com website.
 
 🔴 CRITICAL INSTRUCTION 🔴
 When users ask for a "chart", "graph", "visualization", or "show me", you MUST include the exact format below.
@@ -260,7 +260,7 @@ Remember: ALWAYS include CHART_DATA JSON when users request charts!`;
                                 <Bot className="w-5 h-5 text-white" />
                             </div>
                             <div>
-                                <h3 className="text-white font-bold text-sm">Synopsys AI</h3>
+                                <h3 className="text-white font-bold text-sm">Synopsys Chatbot</h3>
                                 <p className="text-blue-100 text-xs">Online · Ready to help</p>
                             </div>
                         </div>

@@ -44,7 +44,7 @@ const SynopsysAIPage = () => {
     const [messages, setMessages] = useState<Message[]>([
         {
             role: 'assistant',
-            content: "Hello! I'm Synopsys AI, your intelligent marketing analytics assistant. I can help you understand your SEMrush data, identify opportunities, and provide strategic insights. Ask me anything about your traffic, keywords, competitors, or performance metrics!"
+            content: "Hello! I'm Synopsys Chatbot, your intelligent marketing analytics assistant. I can help you understand your SEMrush data, identify opportunities, and provide strategic insights. Ask me anything about your traffic, keywords, competitors, or performance metrics!"
         }
     ]);
     const [input, setInput] = useState('');
@@ -76,7 +76,7 @@ const SynopsysAIPage = () => {
                 throw new Error('OpenAI API key not configured');
             }
 
-            const systemPrompt = `You are Synopsys AI, an expert marketing analytics assistant specializing in SEMrush data analysis.
+            const systemPrompt = `You are Synopsys Chatbot, an expert marketing analytics assistant specializing in SEMrush data analysis.
 
 🔴 CRITICAL: When users request charts, you MUST include properly formatted chart data.
 
@@ -282,7 +282,7 @@ Keep responses concise and always include CHART_DATA when users ask for visualiz
                             <Bot className="w-7 h-7 text-white" />
                         </div>
                         <div>
-                            <h2 className="text-lg font-bold text-gray-900 mb-1">Synopsys AI Assistant</h2>
+                            <h2 className="text-lg font-bold text-gray-900 mb-1">Synopsys Chatbot</h2>
                             <p className="text-xs text-gray-700">Your intelligent marketing analytics companion powered by advanced AI</p>
                         </div>
                     </div>
