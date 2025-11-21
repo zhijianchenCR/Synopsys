@@ -204,10 +204,18 @@ export function calculatePaidVsOrganicData(data: SEMrushData | null) {
     });
 }
 
-export function generateAIInsights(data: SEMrushData | null) {
+export function generateAIInsights(data: SEMrushData | null): Array<{
+    type: "positive" | "warning" | "neutral";
+    title: string;
+    description: string;
+}> {
     if (!data) return [];
 
-    const insights = [];
+    const insights: Array<{
+        type: "positive" | "warning" | "neutral";
+        title: string;
+        description: string;
+    }> = [];
 
     const top3Keywords = data.organicKeywords
         .filter(kw => kw.position <= 3)
@@ -215,7 +223,7 @@ export function generateAIInsights(data: SEMrushData | null) {
 
     if (top3Keywords > 100) {
         insights.push({
-            type: "positive",
+            type: "positive" as const,
             title: "Keyword Performance",
             description: `Strong keyword rankings with ${top3Keywords} keywords in top 3 positions, indicating excellent SEO performance and visibility.`
         });
@@ -227,7 +235,7 @@ export function generateAIInsights(data: SEMrushData | null) {
 
     if (highVolumeKeywords > 0) {
         insights.push({
-            type: "positive",
+            type: "positive" as const,
             title: "High-Value Traffic",
             description: `${highVolumeKeywords} high-volume keywords ranking in top 10, driving significant organic traffic potential.`
         });
@@ -239,7 +247,7 @@ export function generateAIInsights(data: SEMrushData | null) {
 
     if (decliningKeywords > 50) {
         insights.push({
-            type: "warning",
+            type: "warning" as const,
             title: "Position Decline Alert",
             description: `${decliningKeywords} keywords have dropped in rankings. Consider content optimization and technical SEO improvements.`
         });
@@ -248,7 +256,7 @@ export function generateAIInsights(data: SEMrushData | null) {
     const topCompetitor = data.competitors[0];
     if (topCompetitor) {
         insights.push({
-            type: "neutral",
+            type: "neutral" as const,
             title: "Competitive Landscape",
             description: `Main competitor ${topCompetitor.domain} shares ${topCompetitor.commonKeywords} keywords. Monitor their strategy for opportunities.`
         });

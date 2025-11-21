@@ -32,12 +32,15 @@ export interface GeographicData {
 
 export interface CompetitorData {
     domain: string;
+    name: string;
     competitorRelevance: number;
     commonKeywords: number;
     organicKeywords: number;
     organicTraffic: number;
+    traffic: number;
     organicCost: number;
     adwordsKeywords: number;
+    competitionLevel: number;
 }
 
 export interface TopPageData {
@@ -61,6 +64,9 @@ export interface KeywordOpportunity {
     difficulty: number;
     url: string;
     intent: string;
+    type?: string;
+    competitorRanking?: number;
+    opportunity?: string;
 }
 
 export interface AIInsight {
@@ -87,4 +93,23 @@ export interface MetricsSummary {
     trafficValue: number;
     paidTraffic: number;
     visitsChange: number;
+    keywordChange?: number;
+    top10Change?: number;
+    trafficValueChange?: number;
+    paidTrafficChange?: number;
+}
+
+export interface Competitor {
+    name: string;
+    marketShare: number;
+    growthRate: number;
+}
+
+export interface SEMrushData {
+    organicKeywords: KeywordData[];
+    paidKeywords: KeywordData[];
+    trafficTrends: any;
+    geoDistribution: any;
+    competitors: CompetitorData[];
+    topPages: TopPageData[];
 }

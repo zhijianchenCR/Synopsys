@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { Bot, Send, TrendingUp, BarChart3, PieChart, Sparkles, User } from 'lucide-react';
 import { useSEMrushData } from '../hooks/useSEMrushData';
+import { LineChart, Line, BarChart, Bar, PieChart as RechartsPie, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
 interface Message {
     role: 'user' | 'assistant';
@@ -12,6 +13,8 @@ interface ChartData {
     type: 'bar' | 'line' | 'pie';
     data: any[];
     title: string;
+    xKey?: string;
+    yKey?: string;
 }
 
 const suggestedQuestions = [
@@ -74,25 +77,32 @@ const SynopsysAIPage = () => {
             }
 
             const systemPrompt = `You are Synopsys AI, an expert marketing analytics assistant specializing in SEMrush data analysis.
-Your role is to help users understand their marketing performance, identify opportunities, and provide actionable insights.
 
-Key capabilities:
-- Analyze traffic trends, keyword performance, and competitor data
-- Provide strategic recommendations for SEO and SEM optimization
-- Generate insights from organic and paid search data
-- Help identify growth opportunities and areas for improvement
+🔴 CRITICAL: When users request charts, you MUST include properly formatted chart data.
 
-When users ask for charts or visualizations, respond with a JSON object in this exact format at the end of your message:
-CHART_DATA: {"type": "bar|line|pie", "data": [...], "title": "Chart Title"}
+Chart Format Templates (COPY EXACTLY):
 
-Available data context:
+LINE CHART:
+CHART_DATA: {"type": "line", "data": [{"date": "Jan", "value": 15000}, {"date": "Feb", "value": 18000}, {"date": "Mar", "value": 21000}], "title": "Traffic Trend", "xKey": "date", "yKey": "value"}
+
+BAR CHART:
+CHART_DATA: {"type": "bar", "data": [{"name": "Organic", "value": 5000}, {"name": "Paid", "value": 3000}], "title": "Traffic Sources", "xKey": "name", "yKey": "value"}
+
+PIE CHART:
+CHART_DATA: {"type": "pie", "data": [{"name": "US", "value": 45}, {"name": "UK", "value": 25}, {"name": "Germany", "value": 30}], "title": "Geographic Distribution"}
+
+RULES:
+- Always add analysis text BEFORE the CHART_DATA line
+- Put CHART_DATA at the very end
+- Use real data from context below
+- Include xKey and yKey for line/bar charts
+
+Available Synopsys.com data:
 - Total Keywords: ${data?.organicKeywords.length || 0} organic, ${data?.paidKeywords.length || 0} paid
-- Top performing keywords with rankings and traffic data
-- Traffic trends over time (visits, unique visitors, bounce rate)
-- Geographic distribution of traffic
-- Competitor analysis and market positioning
+- Traffic trends: ${data?.trafficTrends.visits.slice(-3).map(d => `${d.date}: ${d.value}`).join(', ')}
+- Top countries: ${data?.geoDistribution.visits.slice(0, 3).map(d => `${d.country}: ${d.trafficShare}%`).join(', ')}
 
-Always provide specific, actionable insights based on the Synopsys platform's SEMrush data. Keep responses concise but informative.`;
+Keep responses concise and always include CHART_DATA when users ask for visualizations.`;
 
             const response = await fetch('https://api.openai.com/v1/chat/completions', {
                 method: 'POST',
@@ -122,14 +132,19 @@ Always provide specific, actionable insights based on the Synopsys platform's SE
             let assistantMessage = responseData.choices[0].message.content;
 
             let chartData: ChartData | undefined;
-            const chartMatch = assistantMessage.match(/CHART_DATA:\s*({.*})/);
+            const chartMatch = assistantMessage.match(/CHART_DATA:\s*({[\s\S]*?})(?=\n|$)/);
             if (chartMatch) {
                 try {
-                    chartData = JSON.parse(chartMatch[1]);
-                    assistantMessage = assistantMessage.replace(/CHART_DATA:\s*{.*}/, '').trim();
+                    const jsonStr = chartMatch[1].trim();
+                    chartData = JSON.parse(jsonStr);
+                    assistantMessage = assistantMessage.replace(/CHART_DATA:\s*{[\s\S]*?}(?=\n|$)/, '').trim();
+                    console.log('✅ Chart data parsed successfully:', chartData);
                 } catch (e) {
-                    console.error('Failed to parse chart data:', e);
+                    console.error('❌ Failed to parse chart data:', e);
+                    console.error('Attempted to parse:', chartMatch[1]);
                 }
+            } else {
+                console.log('ℹ️ No CHART_DATA found in response');
             }
 
             setMessages(prev => [...prev, {
@@ -153,19 +168,113 @@ Always provide specific, actionable insights based on the Synopsys platform's SE
         handleSendMessage(question);
     };
 
+    const CHART_COLORS = ['#3b82f6', '#06b6d4', '#8b5cf6', '#10b981', '#f59e0b', '#ef4444', '#ec4899', '#6366f1'];
+
     const renderChart = (chart: ChartData) => {
+        if (!chart || !chart.data || chart.data.length === 0) {
+            return null;
+        }
+
         return (
-            <div className="mt-4 p-4 bg-white/50 backdrop-blur-sm rounded-xl border border-white/30">
-                <h4 className="text-sm font-bold text-gray-900 mb-3">{chart.title}</h4>
-                <div className="text-xs text-gray-600">
-                    Chart visualization: {chart.type} chart with {chart.data.length} data points
+            <div className="mt-4 p-5 bg-gradient-to-br from-white/80 to-white/60 backdrop-blur-sm rounded-xl border-2 border-blue-200/50 shadow-lg">
+                <h4 className="text-base font-bold text-gray-900 mb-4 flex items-center gap-2">
+                    <BarChart3 className="w-5 h-5 text-blue-600" />
+                    {chart.title}
+                </h4>
+                <div style={{ width: '100%', height: '300px' }}>
+                    <ResponsiveContainer width="100%" height="100%">
+                        {chart.type === 'line' ? (
+                            <LineChart data={chart.data} margin={{ top: 5, right: 20, bottom: 5, left: 0 }}>
+                                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                                <XAxis
+                                    dataKey={chart.xKey || 'name'}
+                                    stroke="#6b7280"
+                                    style={{ fontSize: '12px' }}
+                                />
+                                <YAxis
+                                    stroke="#6b7280"
+                                    style={{ fontSize: '12px' }}
+                                />
+                                <Tooltip
+                                    contentStyle={{
+                                        backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                                        border: '1px solid #e5e7eb',
+                                        borderRadius: '8px',
+                                        boxShadow: '0 4px 6px rgba(0,0,0,0.1)'
+                                    }}
+                                />
+                                <Legend wrapperStyle={{ fontSize: '12px' }} />
+                                <Line
+                                    type="monotone"
+                                    dataKey={chart.yKey || 'value'}
+                                    stroke="#3b82f6"
+                                    strokeWidth={3}
+                                    dot={{ fill: '#3b82f6', r: 4 }}
+                                    activeDot={{ r: 6 }}
+                                />
+                            </LineChart>
+                        ) : chart.type === 'bar' ? (
+                            <BarChart data={chart.data} margin={{ top: 5, right: 20, bottom: 5, left: 0 }}>
+                                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                                <XAxis
+                                    dataKey={chart.xKey || 'name'}
+                                    stroke="#6b7280"
+                                    style={{ fontSize: '12px' }}
+                                />
+                                <YAxis
+                                    stroke="#6b7280"
+                                    style={{ fontSize: '12px' }}
+                                />
+                                <Tooltip
+                                    contentStyle={{
+                                        backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                                        border: '1px solid #e5e7eb',
+                                        borderRadius: '8px',
+                                        boxShadow: '0 4px 6px rgba(0,0,0,0.1)'
+                                    }}
+                                />
+                                <Legend wrapperStyle={{ fontSize: '12px' }} />
+                                <Bar
+                                    dataKey={chart.yKey || 'value'}
+                                    fill="#3b82f6"
+                                    radius={[8, 8, 0, 0]}
+                                />
+                            </BarChart>
+                        ) : chart.type === 'pie' ? (
+                            <RechartsPie>
+                                <Pie
+                                    data={chart.data}
+                                    cx="50%"
+                                    cy="50%"
+                                    labelLine={false}
+                                    label={(entry) => `${entry.name}: ${entry.value}%`}
+                                    outerRadius={100}
+                                    fill="#8884d8"
+                                    dataKey="value"
+                                >
+                                    {chart.data.map((entry, index) => (
+                                        <Cell key={`cell-${index}`} fill={CHART_COLORS[index % CHART_COLORS.length]} />
+                                    ))}
+                                </Pie>
+                                <Tooltip
+                                    contentStyle={{
+                                        backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                                        border: '1px solid #e5e7eb',
+                                        borderRadius: '8px',
+                                        boxShadow: '0 4px 6px rgba(0,0,0,0.1)'
+                                    }}
+                                />
+                                <Legend wrapperStyle={{ fontSize: '12px' }} />
+                            </RechartsPie>
+                        ) : null}
+                    </ResponsiveContainer>
                 </div>
             </div>
         );
     };
 
     return (
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 h-[calc(100vh-4rem)]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             <div className="mb-6">
                 <div className="glass-card rounded-2xl shadow-2xl p-4 mb-4 border-2 border-white/20">
                     <div className="flex items-center gap-3">
@@ -180,10 +289,10 @@ Always provide specific, actionable insights based on the Synopsys platform's SE
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 h-[calc(100%-8rem)]">
+            <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
                 <div className="lg:col-span-3 flex flex-col">
-                    <div className="glass-card rounded-2xl shadow-2xl border-2 border-white/20 flex-1 flex flex-col overflow-hidden">
-                        <div className="flex-1 overflow-y-auto p-6 space-y-4">
+                    <div className="glass-card rounded-2xl shadow-2xl border-2 border-white/20 flex flex-col overflow-hidden" style={{ height: 'calc(100vh - 280px)' }}>
+                        <div className="flex-1 overflow-y-auto p-6 space-y-4 min-h-0">
                             {messages.map((message, index) => (
                                 <div
                                     key={index}
@@ -251,7 +360,7 @@ Always provide specific, actionable insights based on the Synopsys platform's SE
                 </div>
 
                 <div className="lg:col-span-1">
-                    <div className="glass-card rounded-2xl shadow-2xl p-6 border-2 border-white/20 h-full">
+                    <div className="glass-card rounded-2xl shadow-2xl p-6 border-2 border-white/20 overflow-y-auto" style={{ height: 'calc(100vh - 280px)' }}>
                         <h3 className="text-sm font-bold text-gray-900 mb-4 uppercase tracking-wider">Suggested Questions</h3>
                         <div className="space-y-3">
                             {suggestedQuestions.map((suggestion, index) => (

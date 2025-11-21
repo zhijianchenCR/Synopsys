@@ -2,10 +2,17 @@ import { TrendingUp, Target, Zap, Shield } from 'lucide-react';
 
 interface KeywordOpportunity {
     keyword: string;
-    type: string;
+    keywordType: string;
     searchVolume?: number;
     competitorRanking?: number;
     opportunity?: string;
+    intent: string;
+    relevance: number;
+    competition: string;
+    suggestedBid: string;
+    rationale: string;
+    cpc: number;
+    ctrImpact?: string;
 }
 
 interface KeywordOpportunitiesProps {

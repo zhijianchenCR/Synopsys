@@ -1,11 +1,12 @@
 import { Target, CheckCircle2, ArrowUpRight, Clock } from 'lucide-react';
 
 interface ActionItem {
-  priority: 'high' | 'medium' | 'low';
+  priority: string;
   action: string;
   impact: string;
   effort: string;
   category: string;
+  rationale: string;
 }
 
 interface ActionableInsightsProps {

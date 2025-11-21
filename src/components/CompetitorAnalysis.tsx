@@ -35,7 +35,7 @@ export default function CompetitorAnalysis({ competitors }: CompetitorAnalysisPr
                     <div key={index} className="border-2 border-gray-200/50 rounded-xl p-5 hover:border-blue-400 hover:shadow-lg transition-all duration-300 group bg-white/50 backdrop-blur-sm">
                         <div className="flex items-start justify-between mb-4">
                             <a
-                                href={`https://${competitor.name}`}
+                                href={`https://${competitor.domain}`}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="flex items-center space-x-3 group/link"
@@ -45,14 +45,14 @@ export default function CompetitorAnalysis({ competitors }: CompetitorAnalysisPr
                                 </div>
                                 <div>
                                     <div className="flex items-center space-x-2">
-                                        <h4 className="text-sm font-bold text-blue-600 group-hover/link:text-blue-800 group-hover/link:underline">{competitor.name}</h4>
+                                        <h4 className="text-sm font-bold text-blue-600 group-hover/link:text-blue-800 group-hover/link:underline">{competitor.domain}</h4>
                                         <ExternalLink className="w-3 h-3 text-blue-500 group-hover/link:scale-110 transition-transform" />
                                     </div>
                                     <p className="text-xs text-gray-600 font-medium">{competitor.commonKeywords.toLocaleString()} common keywords</p>
                                 </div>
                             </a>
                             <div className="text-right">
-                                <p className="text-sm font-bold text-gray-900">{competitor.traffic.toLocaleString()}</p>
+                                <p className="text-sm font-bold text-gray-900">{competitor.organicTraffic.toLocaleString()}</p>
                                 <p className="text-xs text-gray-600 font-medium">monthly traffic</p>
                             </div>
                         </div>
@@ -94,16 +94,16 @@ export default function CompetitorAnalysis({ competitors }: CompetitorAnalysisPr
 
                         <div className="space-y-2">
                             <div className="flex items-center justify-between text-xs">
-                                <span className="text-gray-600 font-semibold">Competition Level</span>
-                                <span className="font-bold text-gray-900">{competitor.competitionLevel}%</span>
+                                <span className="text-gray-600 font-semibold">Competitor Relevance</span>
+                                <span className="font-bold text-gray-900">{competitor.competitorRelevance}%</span>
                             </div>
                             <div className="w-full bg-gray-100 rounded-full h-2.5 overflow-hidden shadow-inner">
                                 <div
-                                    className={`h-full rounded-full transition-all duration-500 ${competitor.competitionLevel >= 80 ? 'bg-gradient-to-r from-red-500 to-red-600' :
-                                            competitor.competitionLevel >= 60 ? 'bg-gradient-to-r from-orange-500 to-orange-600' :
+                                    className={`h-full rounded-full transition-all duration-500 ${competitor.competitorRelevance >= 80 ? 'bg-gradient-to-r from-red-500 to-red-600' :
+                                            competitor.competitorRelevance >= 60 ? 'bg-gradient-to-r from-orange-500 to-orange-600' :
                                                 'bg-gradient-to-r from-emerald-500 to-emerald-600'
                                         }`}
-                                    style={{ width: `${competitor.competitionLevel}%` }}
+                                    style={{ width: `${competitor.competitorRelevance}%` }}
                                 ></div>
                             </div>
                         </div>
